@@ -21,8 +21,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-
 import java.util.Collections;
+import java.util.List;
 
 
 @Configuration
@@ -58,6 +58,7 @@ private final JwtAuthEntryPoint jwtAuthEntriPoint;
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/tipievento").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/utenti").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/eventi/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/utenti/**").hasRole("ADMIN")
@@ -71,21 +72,19 @@ private final JwtAuthEntryPoint jwtAuthEntriPoint;
     }
  //Configurazione CORS per far accedere il frontend React al backend
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration() ;
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3008", "http://127.0.0.1:3008", "http://localhost:5432", "http://127.0.0.1:5173", "http://localhost", "https://*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of("Authorization"));
 
-            configuration.setAllowedOrigins(Collections.singletonList("*"));//permette tutte le origini
-            configuration.setAllowedMethods((Arrays.asList("GET","POST","PUT","PATCH","DELETE")));//Tutti i metodi
-            configuration.setAllowedHeaders(Collections.singletonList("*"));//tutti gli headers
-
-        //Registrazine della sorgente
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        //Associa la configurazine a tutti i peercorsi
-        source.registerCorsConfiguration("/**",configuration);
-
-        return source ;
-        };
-
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
+
+}
 
 
