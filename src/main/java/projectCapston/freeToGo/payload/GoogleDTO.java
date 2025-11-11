@@ -10,11 +10,12 @@ import java.util.List;
 public class GoogleDTO {
     private String userPrompt;
     private String generatedResponse;
-
+private  String satusMessage;
     private List<Source> sources;
 
     // Classe interna per un singolo risultato
 
+    @Getter
     public static class Source {
         private final String title;
         private final String url;
@@ -41,6 +42,7 @@ public class GoogleDTO {
         this.userPrompt = userPrompt;
         this.generatedResponse = generatedResponse;
         this.sources = sources;
+
     }
 
     @Override

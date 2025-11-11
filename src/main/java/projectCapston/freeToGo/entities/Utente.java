@@ -57,7 +57,7 @@ public class Utente implements UserDetails {
     //ManyToMany per Ruoli
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "utenti_ruoli",
-            joinColumns = @JoinColumn(name = "utente_id"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "ruolo_id"))
     @ToString.Exclude
     private  Set<Ruolo> ruoli=new HashSet<>();
@@ -65,7 +65,7 @@ public class Utente implements UserDetails {
 @Override
     public  Collection <? extends GrantedAuthority> getAuthorities(){
        return ruoli.stream()
-               .map(ruolo-> new SimpleGrantedAuthority(ruolo.getNome().name()))
+               .map(ruolo-> new SimpleGrantedAuthority("ROLE_" + ruolo.getNome().name()))
                .collect((Collectors.toList()));
 }
 @Override

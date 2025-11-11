@@ -47,8 +47,6 @@ public class AuthController {
         }
         return this.utenteService.registerUser(payload);
     }
-
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody @Validated LoginRequestDTO request) {
    try{
@@ -61,6 +59,20 @@ public class AuthController {
        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
    }
     }
+
+    @PostMapping("/register/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Utente createAdmin(@RequestBody @Validated RegistroRequestDTO payload, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            List<String> errors = validationResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            throw new ValidationException(errors);
+        }
+        return this.utenteService.registerAdmin(payload);
+    }
+
+
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Authentication authentication){
         if (authentication == null) {

@@ -31,25 +31,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected  boolean shouldNotFilter(HttpServletRequest request) throws ServletException{
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-
-        if(path.startsWith("/api/auth/")){
-            return true;
-
-        }
-        if (path.startsWith("/api/eventi") && method.equalsIgnoreCase("GET")) {
-            return true;
-        }
-        return false;
-    }
-
-
-
-
-
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -72,6 +53,11 @@ public class JWTFilter extends OncePerRequestFilter {
                 authorities = Arrays.stream(roleString.split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
+            }
+
+
+            if (authorities != null) {
+                authorities.forEach(auth -> System.out.println("Authority: " + auth.getAuthority()));
             }
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(utente, null, authorities);

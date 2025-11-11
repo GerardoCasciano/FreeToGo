@@ -1,16 +1,30 @@
 package projectCapston.freeToGo.payload;
 
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record EventoRequestDTO (
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record EventoRequestDTO(
+        @NotBlank(message = "Il titolo dell'evento è obbligatorio")
         String titolo,
-        String categoria,
+        @NotBlank(message = "La descrizione è obbligatoria")
         String descrizione,
         String avatarUrl,
+        @NotNull(message = "La data e l'ora sono obbligatorie")
         LocalDateTime dataOra,
+        @NotBlank(message = "La città è obbligatoria")
         String citta,
         String regione,
         double latitudine,
-        double longitudine
-){
+        double longitudine,
+        Double prezzo,
+        @NotNull(message = "L'ID del tipo di evento è obbligatorio")
+        UUID tipoEventoId,
+        @NotNull(message = "L'ID della categoria è obbligatorio")
+        UUID categoriaId,
+        @NotNull(message = "L'ID dell'organizzatore è obbligatorio")
+        UUID organizzatoreId
+) {
 }

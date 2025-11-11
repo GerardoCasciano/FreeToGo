@@ -9,18 +9,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projectCapston.freeToGo.entities.Utente;
-import projectCapston.freeToGo.exceptions.ValidationException;
-import projectCapston.freeToGo.payload.RegistroRequestDTO;
-import projectCapston.freeToGo.payload.RuoloUpdateRequestDTO;
+
 import projectCapston.freeToGo.service.UtenteService;
 
 
-import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 
 @Validated
@@ -34,16 +32,6 @@ public class UtenteController {
     public ResponseEntity<List<Utente>> getAllUtenti(){
 List<Utente> utenti =utenteService.findAll();
 return ResponseEntity.ok(utenti);
-    }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Utente createUtente(@RequestBody @Validated RegistroRequestDTO newUserDTO, BindingResult validation) {
-        if (validation.hasErrors()) {
-            throw new ValidationException(validation.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(
-                            Collectors.toList()));
-        }
-        return utenteService.registerUser(newUserDTO);
     }
     //Richiede Autorizzazione
     @GetMapping("/{userId}")
@@ -59,16 +47,6 @@ return ResponseEntity.ok(utenti);
     ){
         Utente utenteAggiornato = utenteService.update(userId,utenteDetails);
         return  ResponseEntity.ok(utenteAggiornato);
-    }
-    @PatchMapping("/{userId}/ruolo")
-    public ResponseEntity<Utente> updateUtenteRuolo(
-            @PathVariable UUID userId,
-            @RequestBody RuoloUpdateRequestDTO request){
-        Utente utenteAggiornato=utenteService.updateRole(
-                userId,
-                request.getNuovoRuolo()
-        );
-        return ResponseEntity.ok(utenteAggiornato);
     }
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUtente(@PathVariable UUID userId){

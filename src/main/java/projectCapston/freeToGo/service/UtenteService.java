@@ -16,6 +16,7 @@ import projectCapston.freeToGo.exceptions.UtenteEsistenteException;
 import projectCapston.freeToGo.payload.AuthResponseDTO;
 import projectCapston.freeToGo.payload.LoginRequestDTO;
 import projectCapston.freeToGo.payload.RegistroRequestDTO;
+import projectCapston.freeToGo.payload.UtenteDTO;
 import projectCapston.freeToGo.repositories.RuoloRepository;
 import projectCapston.freeToGo.repositories.UtenteRepository;
 import projectCapston.freeToGo.security.JWTTools;
@@ -84,6 +85,31 @@ public class UtenteService implements UserDetailsService {
 
 
     @Transactional
+    public Utente registerAdmin(RegistroRequestDTO request){
+        //Verifico esistenza utente
+        if(utenteRepository.existsByEmail(request.email())){
+            throw new UtenteEsistenteException("L'email è già in uso: " + request.email());
+        }
+        //Recupero il ruolo ADMIN dal DB
+        Ruolo adminRuolo = ruoloRepository.findByNome(Ruoli.ADMIN)
+                .orElseThrow(()->new NotFoundException("Ruolo ADMIN non trovato nel DB, assicurarsi sia stato inizializzato."));
+//Creo Utente
+        Utente nuovoUtente = new Utente();
+        nuovoUtente.setNome(request.nome());
+        nuovoUtente.setCognome(request.cognome());
+        nuovoUtente.setEmail(request.email());
+        //Hashing della password
+        String hashedPassword = passwordEncoder.encode((request.password()));
+        nuovoUtente.setPassword(hashedPassword);
+
+        //Assegnazione ruolo (ADMIN)
+        nuovoUtente.getRuoli().add(adminRuolo);
+
+        return utenteRepository.save(nuovoUtente);
+    }
+
+
+    @Transactional
     public Utente assegnaRuolo(UUID utenteId, String nomeRuolo) {
         Utente utente = findById(utenteId);
 //Recupero il ruolo dal DB ,anzichè creare uno nuovo
@@ -133,10 +159,29 @@ public class UtenteService implements UserDetailsService {
         return this.utenteRepository.findById(id).orElseThrow(()->
                 new NotFoundException("L'utente con id " + id + " non è stato trovato."));
     }
+
+    public List<UtenteDTO> getAllUtenti() {
+        return utenteRepository.findAll().stream()
+                .map(utente -> new UtenteDTO(
+                        utente.getId(),
+                        utente.getNome(),
+                        utente.getEmail(),
+                        utente.getPassword(), // Consider if password should be exposed in DTO
+                        utente.getDataCreazione(),
+                        utente.getDataUltimaModifica(),
+                        utente.getAvatarUrl()
+                ))
+                .collect(Collectors.toList());
+    }
     //Elimina utente per Id
     public void deleteById(UUID id){
         findById(id);
         utenteRepository.deleteById(id);
 
+    }
+    //Elimina solo per ADMIN
+    public void deleteUserByAdmin(UUID userId){
+        findById(userId);
+        utenteRepository.deleteById(userId);
     }
 }

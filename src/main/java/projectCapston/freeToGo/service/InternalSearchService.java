@@ -11,33 +11,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EventiService {
+public class InternalSearchService {
 
     @Autowired
     private EventiRepository eventiRepository;
 
-    public List<Eventi> findEvents(LocalDate date, String regione, String categoria) {
+    public List<Eventi> findEvents(LocalDate date, String luogo, String categoria, Double maxPrezzo) {
         List<Specification<Eventi>> specs = new ArrayList<>();
-//Logica di filtro
+
+        //  filtro per data
         if (date != null) {
             specs.add((root, query, cb) -> cb.equal(root.get("dataOra").as(LocalDate.class), date));
         }
 
-        if (regione != null && !regione.isEmpty()) {
-            specs.add((root, query, cb) -> cb.equal(root.get("citta"), regione));
+        // filtro per luogo (città)
+        if (luogo != null && !luogo.isEmpty()) {
+            specs.add((root, query, cb) -> cb.like(cb.lower(root.get("citta")), "%" + luogo.toLowerCase() + "%"));
         }
 
+        // filtro per prezzo massimo
+        if (maxPrezzo != null) {
+            specs.add((root, query, cb) -> cb.lessThanOrEqualTo(root.get("prezzo"), maxPrezzo));
+        }
+
+        //  filtro per nome della categoria (CORRETTA)
         if (categoria != null && !categoria.isEmpty()) {
             specs.add((root, query, cb) -> {
                 query.distinct(true);
-                return cb.equal(root.join("categoria").get("nome"), categoria);
+                // La join corretta: Eventi -> tipoEvento -> categoria -> nome
+                return cb.equal(root.join("tipoEvento").join("categoria").get("nome"), categoria);
             });
         }
 
+        if (specs.isEmpty()) {
+            return eventiRepository.findAll();
+        }
 
-        // Se la lista di specifiche è vuota, findAll non applicherà filtri.
         Specification<Eventi> finalSpec = Specification.allOf(specs);
-
         return eventiRepository.findAll(finalSpec);
     }
 }

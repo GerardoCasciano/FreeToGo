@@ -127,7 +127,7 @@ public class GoogleService {
                 generatedResponse = "Il primo risultato di ricerca suggerisce: " + organicResults.get(0).path("snippet").asText();
             }
 
-            // 3. Passato il nuovo tipo di lista al costruttore
+            //  Passato il nuovo tipo di lista al costruttore
             return new GoogleDTO(userPrompt, generatedResponse, structuredSources);
         } catch (IOException exception) {
             System.err.println("Errore durante il parsing del JSON da SerpApi: " + exception.getMessage());

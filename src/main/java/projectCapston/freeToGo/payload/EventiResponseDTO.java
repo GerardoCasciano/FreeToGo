@@ -12,10 +12,11 @@ public record EventiResponseDTO(
         String categoria,
         String descrizione,
         String avatarUrl,
-        LocalDate dataOra,
+        LocalDateTime dataOra,
         String citta,
         double latitudine,
         double longitudine,
+        Double prezzo,
         UUID organizzatore,
         LocalDateTime dataCreazione,
         LocalDateTime dataUltimaModifica
