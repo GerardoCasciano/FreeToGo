@@ -33,3 +33,11 @@ build/
 .vscode/
 #IGNORE env
 env.properties
+# Frontend build
+frontend/dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log

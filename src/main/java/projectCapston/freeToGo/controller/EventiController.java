@@ -19,6 +19,7 @@ import projectCapston.freeToGo.service.UtenteService;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/eventi")
@@ -74,5 +75,21 @@ public class EventiController {
         }
         // Se la ricerca ha successo, restituisci 200 OK
         return ResponseEntity.ok(searchResult);
+    }
+
+    @GetMapping("/{id}")
+    public Eventi findById(@PathVariable UUID id) {
+        return eventiService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Eventi findByIdAndUpdate(@PathVariable UUID id, @RequestBody Eventi body) {
+        return eventiService.updateEvento(id, body);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findByIdAndDelete(@PathVariable UUID id) {
+        eventiService.deleteEvente(id);
     }
 }

@@ -90,8 +90,9 @@ public class DataBaseEventiService {
     }
 
     //Trova evento tramite id
-    public Optional<Eventi> findById(UUID id) {
-        return eventiRepository.findById(id);
+    public Eventi findById(UUID id) {
+        return eventiRepository.findById(id)
+                .orElseThrow(() -> new ResourseNotFoundException("Evento non trovato con Id :" + id));
     }
 
     //Elimina evento tramite id
