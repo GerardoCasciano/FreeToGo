@@ -43,8 +43,8 @@ public class GoogleService {
                 lowerPrompt.contains("sport") ||
                 lowerPrompt.contains("mostra") ||
                 lowerPrompt.contains("musica") ||
-                lowerPrompt.contains("evento culturale") ||
-                lowerPrompt.contains("partita");
+                lowerPrompt.contains("evento culturale");
+
  }
     public GoogleDTO executeSearch(String userPrompt) {
         //Filtro per cintrollo prima di chiamare  SerpApi
