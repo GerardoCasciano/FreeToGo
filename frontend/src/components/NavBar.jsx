@@ -32,6 +32,7 @@ const NavBar = () => {
       expand="lg"
       className=" navbar-cartoon-font navbar-glass"
       variant="dark"
+      style={{ zIndex: 1050 }}
     >
       <Container fluid>
         <Navbar.Brand className="p-0" href="/">
@@ -84,6 +85,13 @@ const NavBar = () => {
           </Nav>
 
           <Nav className="align-items-center">
+            <RBImage
+              src="bg-cartoon.jpg"
+              height="40"
+              width="40"
+              roundedCircle
+              className="me-3"
+            />
             <Button className="me-3 rounded-pill btn-glass" href="/login">
               Login
             </Button>

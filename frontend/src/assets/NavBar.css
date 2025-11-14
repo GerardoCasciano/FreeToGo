@@ -1,8 +1,8 @@
   .navbar-glass {
        background: rgba(25, 25, 25, 0.45);
        backdrop-filter: blur(10px);
-       border: 1px solid rgba(0, 0, 0, 0.18);
-       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+       /* border: 1px solid rgba(0, 0, 0, 0.18); */
+       /* box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); */
        padding-top: 0.5rem !important;
        padding-bottom: 0.5rem !important;
      }
@@ -57,18 +57,16 @@
     }
     
     .btn-glass2 {
-      background: rgba(0, 0, 0, 0);
-      backdrop-filter: blur(5px);
+      /* background: rgba(0, 0, 0, 0); */
+      /* backdrop-filter: blur(5px); */
       -webkit-backdrop-filter: blur(20px);
       filter: brightness(1.2);
      
       color: rgb(238, 199, 91) !important;
       font-family: 'Luckiest Guy', cursive;
       font-weight: normal;
-      box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.445);
+      /* box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.445); */
       transition: background 0.3s;
     }
     
-    .btn-glass:hover {
-      background: rgba(0, 0, 0, 0.4);
-    }
+   
