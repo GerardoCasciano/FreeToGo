@@ -1,0 +1,11 @@
+.custom-info-card {
+  /* background-color: rgb(250, 204, 79); <-- RIMUOVI QUESTA RIGA */
+  border-radius: 15px; /* Angoli smussati */
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* Ombra obliqua */
+  transform: rotate(2deg); /* Rotazione di 2 gradi */
+  transition: transform 0.3s ease-in-out; /* Animazione al passaggio del mouse */
+}
+
+.custom-info-card:hover {
+  transform: rotate(0deg) scale(1.05); /* Effetto al passaggio del mouse */
+}
