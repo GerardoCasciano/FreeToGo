@@ -6,7 +6,11 @@ const Homepage = () => {
       <Card.Img
         src="/bg-cartoon.jpg"
         alt=""
-        style={{ height: "20rem", objectFit: "cover", opacity: "60%" }}
+        style={{
+          height: "70rem",
+          objectFit: "cover",
+          opacity: "60%",
+        }}
       />
       <Card.ImgOverlay
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
@@ -20,7 +24,7 @@ const Homepage = () => {
           }}
           className=" display-1 font-color my-5 fw-bold "
         >
-          FreeToGO!
+          Free To GO!
         </Card.Title>
         <Card.Text
           style={{

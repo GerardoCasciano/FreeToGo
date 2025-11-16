@@ -30,14 +30,14 @@ const NavBar = () => {
   return (
     <Navbar
       expand="lg"
-      className=" navbar-cartoon-font navbar-glass"
+      className=" navbar-cartoon-font navbar-glass sticky-top"
       variant="dark"
       style={{ zIndex: 1050 }}
     >
       <Container fluid>
         <Navbar.Brand className="p-0" href="/">
           <RBImage
-            src="/1000117943.png"
+            src="/1000119769.png"
             alt="freeToGo Logo"
             height="45"
             className="d-inline-block align-top rounded-circle p-0"

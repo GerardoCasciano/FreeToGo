@@ -104,7 +104,7 @@ const CategoriaAdminPage = () => {
     <Container className="mt-4">
       <h2>Gestione Categorie</h2>
       <hr />
-      <div className="p-4 border rounded-3 mb-4 bg-light">
+      <div className="p-4 border rounded-3 mb-4 bg-light btn-glass">
         <h4>Aggiungi Nuova Categoria</h4>
         {erroreAggiunta && <Alert variant="warning">{erroreAggiunta}</Alert>}
         <BootstrapForm onSubmit={gestisciSubmit}>
@@ -144,7 +144,7 @@ const CategoriaAdminPage = () => {
               </BootstrapForm.Group>
             </Col>
             <Col md={2} className="mb-3">
-              <Button type="submit" className="w-100">
+              <Button type="submit" className="w-100 btn-glass ">
                 Aggiungi
               </Button>
             </Col>
@@ -154,7 +154,7 @@ const CategoriaAdminPage = () => {
 
       <h4>Categorie Esistenti</h4>
       {caricamento && (
-        <div className="text-center">
+        <div className="text-center ">
           <Spinner animation="border" />
         </div>
       )}
@@ -183,6 +183,7 @@ const CategoriaAdminPage = () => {
                   variant="danger"
                   size="sm"
                   onClick={() => gestisciEliminazione(categoria.id)}
+                  className="btn-glass fs-5"
                 >
                   Elimina
                 </Button>
