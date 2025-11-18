@@ -1,4 +1,6 @@
 package projectCapston.freeToGo.payload;
 
-public record AuthResponseDTO(String accessToken,String nome,String cognome,String ruoli) {
+import java.util.UUID;
+
+public record AuthResponseDTO(UUID id, String accessToken, String nome, String cognome, String ruoli) {
 }

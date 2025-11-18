@@ -32,6 +32,7 @@ public class Utente implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+
     @Column(name = "dataCreazione",nullable = false )
     private LocalDateTime dataCreazione;
     @Column(name = "dataUltimaModifica", nullable = false)

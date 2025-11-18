@@ -2,13 +2,17 @@ package projectCapston.freeToGo.runner;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import projectCapston.freeToGo.entities.Ruoli;
 import projectCapston.freeToGo.entities.Ruolo;
 import projectCapston.freeToGo.repositories.RuoloRepository;
 
+import java.util.Arrays;
+
 @Component
 @Slf4j
+@Order(1)
 public class Ruoloinitialaizer implements CommandLineRunner {
     private final RuoloRepository ruoloRepository;
 
@@ -22,20 +26,26 @@ public class Ruoloinitialaizer implements CommandLineRunner {
         final String NOME_RUOLO="USER";
         log.info("---INIZIALIZZAZIONE RUOLI---");
         //Controllo se il ruolo USER esiste nel DB
-        Ruolo userRuolo=null;
-        if (ruoloRepository.findByNome(Ruoli.valueOf(NOME_RUOLO)).isEmpty()){
+       Arrays.stream(Ruoli.values()).forEach(nomeRuolo -> { if (ruoloRepository.findByNome(Ruoli.valueOf(NOME_RUOLO)).isEmpty()){
+           //Se non esiste ,crea una nuova istanza e imposta il nome
+           Ruolo nuovoRuolo= new Ruolo();
+           nuovoRuolo.setNome(Ruoli.valueOf(NOME_RUOLO));
+           //Salva la nuov istanza nel DB
+           ruoloRepository.save(nuovoRuolo);
+           log.info("Ruolo {} creato e  salvato  con successo.",NOME_RUOLO);
 
-        //Se non esiste ,crea una nuova istanza e imposta il nome
-            Ruolo userRole= new Ruolo();
-            userRole.setNome(Ruoli.valueOf(NOME_RUOLO));
-       //Salva la nuov istanza nel DB
-        ruoloRepository.save(userRole);
-        log.info("Ruolo {} creato e  salvato  con successo.",NOME_RUOLO);
+       }else {
+           log.info("Ruolo già esistente nel DB.");
+       }
+       });
+           log.info("--FINE INIZIALIZZAZIONE RUOLI----");
+       }
 
-        }else {
-            log.info("Ruolo già esistente nel DB.");
-        }
-        log.info("--FINE INIZIALIZZAZIONE RUOLI----");
-    }
+
+
+
+
+
+
 
 }

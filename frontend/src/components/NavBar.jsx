@@ -6,27 +6,24 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import RBImage from "react-bootstrap/Image";
 import "../assets/NavBar.css";
-import categoriaService from "../api/categoriaService/";
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
+import { isAuthenticated, logout } from "../api/authService";
+import { useNavigate } from "react-router-dom";
+
 const NavBar = () => {
-  const [categorie, setCategorie] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const isAuth = isAuthenticated();
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   useEffect(() => {
-    const fetchCategorie = async () => {
-      try {
-        const data = await categoriaService.getAllCategorie();
-        setCategorie(data);
-      } catch (err) {
-        setError("impossibilie caricare le categorie!");
-        console.error("Fetch categorie FALLITO!", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategorie();
-  }, []);
+    // This useEffect can be used for fetching categories or other side effects
+    // For now, it's empty as the JSX was moved out.
+  }, []); // Empty dependency array means it runs once on mount
+
   return (
     <Navbar
       expand="lg"
@@ -49,66 +46,47 @@ const NavBar = () => {
             <Nav.Link className="btn-glass2  m-1" href="/">
               Home
             </Nav.Link>
-            <Nav.Link className="btn-glass2 m-1 " href="/eventi">
-              Eventi
-            </Nav.Link>
-            <NavDropdown
-              className="btn-glass2 m-1"
-              title="Tutte le categorie"
-              id="navbarScrollingDropdown"
-            >
-              {loading && (
-                <NavDropdown.Item key="loading" disabled>
-                  Caricamento...
-                </NavDropdown.Item>
-              )}
-              {error && (
-                <NavDropdown.Item key="erro" disabled>
-                  {error}
-                </NavDropdown.Item>
-              )}
-              {!loading && !error && categorie.length === 0 && (
-                <NavDropdown.Item key="no-categorie" disabled>
-                  Nessuna categoria trovata
-                </NavDropdown.Item>
-              )}
-              {categorie.map((categoria) => (
-                <NavDropdown.Item
-                  key={categoria.id}
-                  href={"/categorie/${categoria.nome}"}
-                  className="btn-glass"
-                >
-                  {categoria.nome}
-                </NavDropdown.Item>
-              ))}
-            </NavDropdown>
+            {isAuth && (
+              <Nav.Link className="btn-glass2 m-1" href="/events/add">
+                Aggiungi Evento
+              </Nav.Link>
+            )}
           </Nav>
 
           <Nav className="align-items-center">
-            <RBImage
-              src="bg-cartoon.jpg"
-              height="40"
-              width="40"
-              roundedCircle
-              className="me-3"
-            />
-            <Button className="me-3 rounded-pill btn-glass" href="/login">
-              Login
-            </Button>
-            <Button className="rounded-pill btn-glass" href="/register">
-              Registrati
-            </Button>
-          </Nav>
+            {isAuth ? (
+              <>
+                <RBImage
+                  src="bg-cartoon.jpg"
+                  height="40"
+                  width="40"
+                  roundedCircle
+                  className="me-3"
+                />
+                <Button
+                  className="me-3 rounded-pill btn-glass"
+                  onClick={handleLogout}
+                  variant="danger"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="success"
+                  className="me-3 rounded-pill btn-glass"
+                  href="/login"
+                >
+                  Login
+                </Button>
 
-          <Form className="d-flex ms-3">
-            <Form.Control
-              type="search"
-              placeholder="Cerca eventi..."
-              className="me-2 rounded-pill"
-              aria-label="Cerca eventi"
-            />
-            <Button className="rounded-pill btn-glass">Cerca</Button>
-          </Form>
+                <Button className="rounded-pill btn-glass" href="/register">
+                  Registrati
+                </Button>
+              </>
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

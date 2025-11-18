@@ -1,10 +1,15 @@
 import api from "./api";
 
-const login = async (Credential) => {
+export const login = async (credentials) => {
   try {
-    const response = await api.post("/api/auth/login", Credential);
-    if (response.data && response.data.token) {
-      localStorage.setItem("token", response.data.token);
+    const response = await api.post("/api/auth/login", credentials);
+    if (response.data && response.data.accessToken) {
+      const token = response.data.accessToken;
+      localStorage.setItem("token", token);
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const { accessToken: _, ...userData } = response.data;
+      localStorage.setItem("user", JSON.stringify(userData));
+      return userData;
     }
     return response.data;
   } catch (error) {
@@ -14,10 +19,10 @@ const login = async (Credential) => {
 };
 
 //invia dati nuovo utente per la registrazione
-const register = async (userData) => {
+export const register = async (userData) => {
   try {
-    const respomse = await api.post("/api/auth/register", userData);
-    return respomse.data;
+    const response = await api.post("/api/auth/register", userData);
+    return response.data;
   } catch (error) {
     console.error(
       "Registrazone fallita:",
@@ -27,10 +32,10 @@ const register = async (userData) => {
   }
 };
 //Stessa cosa per Admin
-const registerAdmin = async (adminData) => {
+export const registerAdmin = async (adminData) => {
   try {
-    const respomse = await api.post("/api/auth/register/admin", adminData);
-    return register.data;
+    const response = await api.post("/api/auth/register/admin", adminData);
+    return response.data;
   } catch (error) {
     console.error(
       "Registrazone Admin fallita:",
@@ -41,10 +46,10 @@ const registerAdmin = async (adminData) => {
 };
 //Recupera dati dell'utente  autenticato
 
-const getMe = async () => {
+export const getMe = async () => {
   try {
-    const respomse = await api.get("/api/auth/me");
-    return respomse.data;
+    const response = await api.get("/api/auth/me");
+    return response.data;
   } catch (error) {
     console.error(
       "Errore recupero dei dati utente.",
@@ -54,8 +59,14 @@ const getMe = async () => {
   }
 };
 //Eseguo logout untente
-const logout = () => {
+export const logout = () => {
   localStorage.removeItem("token");
+  delete api.defaults.headers.common["Authorization"];
+};
+//Controlliamo se utente è loggato
+export const isAuthenticated = () => {
+  const token = localStorage.getItem("token");
+  return !!token;
 };
 
 //Espostiamo  le funzioni create in unico oggetto

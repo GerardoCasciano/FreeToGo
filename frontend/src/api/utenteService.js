@@ -1,4 +1,4 @@
-import { ssrDynamicImportKey } from "vite/module-runner";
+
 import api from "./api";
 
 const UTENTE_API_URL = "/api/utenti";
@@ -16,7 +16,7 @@ const utenteService = {
   },
   getUtentiById: async (utenteId) => {
     try {
-      const response = await api.get("${UTENTE_API_URL}/${utenteId}");
+      const response = await api.get(`${UTENTE_API_URL}/${utenteId}`);
       return response.data;
     } catch (error) {
       console.error(`Errore Fetch per untente con Id ${utenteId}:`, error);
@@ -27,7 +27,7 @@ const utenteService = {
   updateUtente: async (utenteId, utenteData) => {
     try {
       const response = await api.put(
-        "${UTENTE_API_URL}/${utenteId}",
+        `${UTENTE_API_URL}/${utenteId}`,
         utenteData
       );
       return response.data;
@@ -41,7 +41,7 @@ const utenteService = {
   },
   deleteUtente: async (utenteId) => {
     try {
-      const reponse = await api.delete("${UTENTE_API_URL}/${utenteId}");
+      const response = await api.delete(`${UTENTE_API_URL}/${utenteId}`);
       return response.data;
     } catch (error) {
       console.error(`Errore ELEMINIZAIONE utente con Id ${utenteId}:`, error);

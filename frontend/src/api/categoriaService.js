@@ -1,4 +1,4 @@
-import { redirectDocument } from "react-router-dom";
+
 import api from "./api";
 
 const CATEGORIA_API_URL = "/api/categoria";
@@ -18,6 +18,7 @@ const categoriaService = {
   createCategoria: async (categorisData) => {
     try {
       const response = await api.post(CATEGORIA_API_URL, categorisData);
+      return response.data;
     } catch (error) {
       console.error("Errore CREAZIONE categoria :", error);
     }

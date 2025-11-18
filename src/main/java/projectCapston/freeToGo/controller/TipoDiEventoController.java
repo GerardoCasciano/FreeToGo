@@ -22,7 +22,7 @@ public class TipoDiEventoController {
     public List<TipoDiEvento> findAll(){
         return tipoDIEventoService.getAllTipiEvento();
     }
-    @GetMapping("/categoria/{categriaId}")
+    @GetMapping("/categoria/{categoriaId}")
     @ResponseStatus(HttpStatus.OK)
     public List<TipoDiEvento> findByCategoriaId(@PathVariable UUID categoriaId){
         return tipoDIEventoService.findByCategoriaId(categoriaId);

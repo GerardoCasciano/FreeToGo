@@ -1,12 +1,22 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
 import React from "react";
 import "../assets/CustomCards.css";
+import { useNavigate } from "react-router-dom";
 const InfoCards = () => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (genre) => {
+    navigate(`/search?q=${genre}`);
+  };
   return (
     <Container className="my-5">
       <Row className="g-5">
         <Col md={4}>
-          <Card className="h-100 shadow-sm custom-info-cards   ">
+          <Card
+            className="h-100 shadow-sm custom-info-cards "
+            onClick={() => handleCardClick("Musica")}
+            style={{ cursor: "pointer" }}
+          >
             <Card.Img variant="top" src="/musica.png" />
             <Card.Body className="d-flex flex-column flex-grow-1 ">
               <Card.Title className="text-center mb-3">
@@ -21,7 +31,11 @@ const InfoCards = () => {
         </Col>
 
         <Col md={4}>
-          <Card className=" shadow-sm custom-info-cards2  h-100 ">
+          <Card
+            className=" shadow-sm custom-info-cards2  h-100 "
+            onClick={() => handleCardClick("Arte")}
+            style={{ cursor: "pointer" }}
+          >
             <Card.Img variant="top" src="/arte.jpg" />
             <Card.Body className="d-flex flex-column flex-grow-1">
               <Card.Title className="text-center  mb-3">
@@ -35,7 +49,11 @@ const InfoCards = () => {
           </Card>
         </Col>
         <Col md={4}>
-          <Card className=" shadow-sm custom-info-cards3 h-100">
+          <Card
+            className=" shadow-sm custom-info-cards3 h-100"
+            onClick={() => handleCardClick("Sport")}
+            style={{ cursor: "pointer" }}
+          >
             <Card.Img variant="top" src="/sport.jpg" />
             <Card.Body className="d-flex flex-column flex-grow-1">
               <Card.Title className="text-center  mt-auto">

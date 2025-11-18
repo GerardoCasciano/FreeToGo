@@ -20,7 +20,7 @@ import projectCapston.freeToGo.payload.UtenteDTO;
 import projectCapston.freeToGo.repositories.RuoloRepository;
 import projectCapston.freeToGo.repositories.UtenteRepository;
 import projectCapston.freeToGo.security.JWTTools;
-
+import org.springframework.context.annotation.Lazy;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -33,6 +33,7 @@ public class UtenteService implements UserDetailsService {
     @Autowired
     private RuoloRepository ruoloRepository;
     @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JWTTools jwtTools;
@@ -53,7 +54,7 @@ public class UtenteService implements UserDetailsService {
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(", "));
 
-            return new AuthResponseDTO(token, utente.getNome(), utente.getCognome(), ruoli);
+            return new AuthResponseDTO(utente.getId(),token, utente.getNome(), utente.getCognome(), ruoli);
         } else {
             throw new RuntimeException("Credenziali non valide");
         }

@@ -28,7 +28,6 @@ const AdminRegistrazionePage = () => {
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -44,33 +43,33 @@ const AdminRegistrazionePage = () => {
     try {
       await authService.registerAdmin(formData);
       setRegistrationSuccess(true);
-      setFormData({
-        nome: "",
-        cognome: "",
-        email: "",
-        password: "",
-      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      const erroMessage =
+      const errorMessage =
         error.response?.data?.message ||
         error.message ||
-        "Errore di registrazione";
-      setError(erroMessage);
+        "Errore di registrazone";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <Container className="mt-5 btn-glass">
       {registrationSuccess && (
-        <Alert variant="success">Registrazione avvenuta con successo!</Alert>
+        <Alert variant="success">
+          Registrazione avvenuta con successo! Sarai reindirizzato al login.
+        </Alert>
       )}
-      {error && <Alert variant="danger">{error}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <h2>Registrazione Amministratore</h2>
         <Row className="mb-3">
-          <Form.Group as={Col} md="4" controlId="validationCustom01">
+          <Form.Group as={Col} md="6" controlId="validationCustom01">
             <Form.Label>Nome</Form.Label>
             <Form.Control
               required
@@ -80,13 +79,12 @@ const AdminRegistrazionePage = () => {
               value={formData.nome}
               onChange={handleChange}
             />
+
             <Form.Control.Feedback type="invalid">
-              Per favore iniserisci il nome
+              Per favore inserisci il nome.
             </Form.Control.Feedback>
           </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="4" controlId="validationCustomCognome">
+          <Form.Group as={Col} md="6" controlId="validationCustomCognome">
             <Form.Label>Cognome</Form.Label>
             <Form.Control
               required
@@ -102,7 +100,7 @@ const AdminRegistrazionePage = () => {
           </Form.Group>
         </Row>
         <Row className="mb-3">
-          <Form.Group as={Col} md="4" controlId="validationCustom02">
+          <Form.Group as={Col} md="12" controlId="validationCustom02">
             <Form.Label>Email</Form.Label>
             <Form.Control
               required
@@ -113,30 +111,42 @@ const AdminRegistrazionePage = () => {
               onChange={handleChange}
             />
             <Form.Control.Feedback type="invalid">
-              Inserire indirizzo email valido.
+              {" "}
+              ▄ Inserire indirizzo email valido.
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3">
-          <Form.Group as={Col} md="4" controlId="validationCustom03">
+          <Form.Group as={Col} md="12" controlId="validationCustom03">
             <Form.Label>Password</Form.Label>
-
             <Form.Control
               type="password"
-              placeholder="password"
+              placeholder="Password"
               name="password"
               required
               value={formData.password}
               onChange={handleChange}
             />
             <Form.Control.Feedback type="invalid">
-              Inserisci un password valida
+              Inserisci una password valida.
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-
         <Button type="submit" disabled={loading} className="btn-glass">
-          {loading ? <Spinner animation="border" size="sm" /> : "Regista"}
+          {loading ? (
+            <>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />{" "}
+              Registrazione...
+            </>
+          ) : (
+            "Registra"
+          )}
         </Button>
       </Form>
     </Container>

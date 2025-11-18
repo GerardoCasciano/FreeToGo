@@ -1,12 +1,12 @@
 import api from "./api";
 
-const getEvento = async () => {
+const getALLEventi = async (id) => {
   try {
-    const response = await api.get("/api/search");
+    const response = await api.get(`/api/eventi/${id}`);
     return response.data;
   } catch (error) {
     console.error(
-      "Errore nel recupero di tutti gli eventi:",
+       `Errore nel recupero dell'evento con ID ${id}:`,
       error.response?.data || error.message
     );
     throw error;
@@ -40,9 +40,9 @@ const createEvento = async (eventoData) => {
   }
 };
 
-const upDateEvento = async (id, eventoData) => {
+const updateEvento = async (id, eventoData) => {
   try {
-    const response = await api.put(`/api/eventi/${id}`, eventData);
+    const response = await api.put(`/api/eventi/${id}`, eventoData);
     return response.data;
   } catch (error) {
     console.error(
@@ -56,22 +56,48 @@ const upDateEvento = async (id, eventoData) => {
 const deleteEvento = async (id) => {
   try {
     const response = await api.delete(`/api/eventi/${id}`);
-    return reponse.data;
+    return response.data;
   } catch (error) {
     console.error(
       `Errore nell'eliminazione dell'evento con ID ${id}:`,
-      error.reponse?.data || error.message
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+export const getAllCategorie = async () => {
+try{
+  const response = await api.get("/api/categoria");
+  return response.data;
+}catch (error){
+  console.error("Errore durante il recupero delle categorie:", error.response?.data || error.message);
+  throw error;
+}
+};
+export const getTipiEventoByCategoria= async (categoriaId)=>{
+  try{
+    const response =await api.get(`/api/tipievento/categoria/${categoriaId}`)
+    return response.data;
+
+  }catch(error){
+    console.error(
+      `Errore nel recupero dei tipi di evento per categoria ${categoriaId}:`,
+      error.response?.data || error.message
     );
     throw error;
   }
 };
 
+
 const eventiService = {
-  getEvento,
+  getALLEventi,
   getEventoById,
   createEvento,
-  upDateEvento,
+  updateEvento,
+  getAllCategorie,
   deleteEvento,
+  getTipiEventoByCategoria,
 };
+
 
 export default eventiService;
