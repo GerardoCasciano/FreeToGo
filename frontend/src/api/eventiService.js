@@ -1,12 +1,25 @@
 import api from "./api";
 
-const getALLEventi = async (id) => {
+const getAllEventi = async () => {
   try {
-    const response = await api.get(`/api/eventi/${id}`);
+    const response = await api.get("/api/eventi");
     return response.data;
   } catch (error) {
     console.error(
-       `Errore nel recupero dell'evento con ID ${id}:`,
+      "Errore nel recupero degli eventi:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+const getMyEventi = async () => {
+  try {
+    const response = await api.get("/api/eventi/me");
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Errore nel recupero dei eveneti:",
       error.response?.data || error.message
     );
     throw error;
@@ -15,8 +28,7 @@ const getALLEventi = async (id) => {
 
 const getEventoById = async (id) => {
   try {
-    const response = await api.get("/api/eventi/${id}:");
-
+    const response = await api.get(`/api/eventi/${id}`);
     return response.data;
   } catch (error) {
     console.error(
@@ -65,21 +77,25 @@ const deleteEvento = async (id) => {
     throw error;
   }
 };
-export const getAllCategorie = async () => {
-try{
-  const response = await api.get("/api/categoria");
-  return response.data;
-}catch (error){
-  console.error("Errore durante il recupero delle categorie:", error.response?.data || error.message);
-  throw error;
-}
-};
-export const getTipiEventoByCategoria= async (categoriaId)=>{
-  try{
-    const response =await api.get(`/api/tipievento/categoria/${categoriaId}`)
-    return response.data;
 
-  }catch(error){
+const getAllCategorie = async () => {
+  try {
+    const response = await api.get("/api/categoria");
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Errore durante il recupero delle categorie:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+const getTipiEventoByCategoria = async (categoriaId) => {
+  try {
+    const response = await api.get(`/api/tipievento/categoria/${categoriaId}`);
+    return response.data;
+  } catch (error) {
     console.error(
       `Errore nel recupero dei tipi di evento per categoria ${categoriaId}:`,
       error.response?.data || error.message
@@ -88,16 +104,17 @@ export const getTipiEventoByCategoria= async (categoriaId)=>{
   }
 };
 
-
+// Oggetto service che include tutte le funzioni
 const eventiService = {
-  getALLEventi,
+  getAllEventi,
   getEventoById,
   createEvento,
   updateEvento,
-  getAllCategorie,
   deleteEvento,
+  getAllCategorie,
   getTipiEventoByCategoria,
+  getMyEventi,
 };
 
-
+// Esportazione unica di default
 export default eventiService;

@@ -1,28 +1,20 @@
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import RBImage from "react-bootstrap/Image";
 import "../assets/NavBar.css";
-
-import { useEffect } from "react";
 import { isAuthenticated, logout } from "../api/authService";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const isAuth = isAuthenticated();
+
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
-
-  useEffect(() => {
-    // This useEffect can be used for fetching categories or other side effects
-    // For now, it's empty as the JSX was moved out.
-  }, []); // Empty dependency array means it runs once on mount
 
   return (
     <Navbar
@@ -47,9 +39,14 @@ const NavBar = () => {
               Home
             </Nav.Link>
             {isAuth && (
-              <Nav.Link className="btn-glass2 m-1" href="/events/add">
-                Aggiungi Evento
-              </Nav.Link>
+              <>
+                <Nav.Link className="btn-glass2 m-1" href="/eventi/add">
+                  Aggiungi Evento
+                </Nav.Link>
+                <Nav.Link className="btn-glass2 m-1" href="/my-eventi">
+                  i miei eventi
+                </Nav.Link>
+              </>
             )}
           </Nav>
 
@@ -66,18 +63,13 @@ const NavBar = () => {
                 <Button
                   className="me-3 rounded-pill btn-glass"
                   onClick={handleLogout}
-                  variant="danger"
                 >
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <Button
-                  variant="success"
-                  className="me-3 rounded-pill btn-glass"
-                  href="/login"
-                >
+                <Button className="me-3 rounded-pill btn-glass" href="/login">
                   Login
                 </Button>
 

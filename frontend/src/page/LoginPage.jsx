@@ -45,7 +45,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Container className="mt-5 d-flex flex-column justify-content-center flex-grow-1">
+    <Container className="mt-5 d-flex flex-column justify-content-center flex-grow-1 navbar-glass">
       <Row className="justify-content-md-center">
         <Col md={6}>
           <h2 className="text-center mb-4 btn-glass">Accesso Utente</h2>
@@ -79,7 +79,7 @@ const LoginPage = () => {
             <div className="d-grid">
               <Button
                 className="btn-glass mt-2 w-25 rounded-pill mb-3"
-                variant="primary"
+                variant="success"
                 type="submit"
                 disabled={loading}
               >

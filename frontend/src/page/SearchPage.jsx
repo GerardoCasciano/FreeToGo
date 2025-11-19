@@ -44,8 +44,8 @@ const SearchPage = () => {
     }
   };
   return (
-    <Container className=" mt-5   ">
-      <h1 className="btn-glass">Pagina di Ricerca</h1>
+    <Container className=" mt-5  navbar-glass  ">
+      <h1 className="btn-glass text-center">Pagina di Ricerca</h1>
       <p>I risultati della ricerca appariranno qui.</p>
       <Form onSubmit={handleSearchSubmit} className="d-flex mt-4 mb-4">
         <Form.Control

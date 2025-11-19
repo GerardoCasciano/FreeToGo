@@ -9,9 +9,18 @@ import {
   Spinner,
   Alert,
 } from "react-bootstrap";
-import "../api/eventiService";
-
 import eventiService from "../api/eventiService";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+});
 
 const AddEventiPage = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +29,7 @@ const AddEventiPage = () => {
     avatarUrl: "",
     dataOra: "",
     citta: "",
+    via: "",
     regione: "",
     latitudine: 0,
     longitudine: 0,
@@ -28,49 +38,72 @@ const AddEventiPage = () => {
     tipoEventoNome: "",
   });
 
-  const [categorie, setCategoria] = useState([]);
-  const [tipoEvento, setTipoEvento] = useState([]);
+  const [categorie, setCategorie] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  //Funzione per caricare le categorie al montaggio del componente
+  const [markerPosition, setMarkerPosition] = useState({
+    lat: 41.902782,
+    lng: 12.496366,
+  }); // Default to Rome
+
+  // Componente per gestire gli eventi della mappa
+  function LocationMarker() {
+    useMapEvents({
+      click(e) {
+        setMarkerPosition(e.latlng);
+        setFormData((prev) => ({
+          ...prev,
+          latitudine: e.latlng.lat,
+          longitudine: e.latlng.lng,
+        }));
+
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setFormData((prev) => ({
+              ...prev,
+              citta:
+                data.address.city ||
+                data.address.town ||
+                data.address.village ||
+                "",
+              via: data.address.road || "", // Get street name
+              regione: data.address.state || data.address.country || "",
+            }));
+          })
+          .catch((error) =>
+            console.error("Error during reverse geocoding:", error)
+          );
+      },
+    });
+
+    return markerPosition ? <Marker position={markerPosition}></Marker> : null;
+  }
+
+  // Funzione per caricare le categorie al montaggio del componente
   useEffect(() => {
-    const fetchCategoria = async () => {
+    const fetchCategorie = async () => {
       try {
         const data = await eventiService.getAllCategorie();
-        setCategoria(data);
+        setCategorie(data);
       } catch (error) {
-        console.error("Errore fetch categoria", error);
-        setError("Errore.Impossibile  caricare le categorie.");
+        console.error("Errore fetch categorie:", error);
+        setError("Errore.Impossibile caricare le categorie.");
       }
     };
-    fetchCategoria();
+    fetchCategorie();
   }, []);
 
-  //Funzione per caricare i tipi di evento quando si selezione una categoria
-
-  useEffect(() => {
-    if (formData.categoriaId) {
-      const fetchTipiEvento = async () => {
-        try {
-          const data = await eventiService.getTipiEventoByCategoria(
-            formData.categoriaId
-          );
-          setTipoEvento(data);
-        } catch (error) {
-          console.error("Errore fetch tipi evento", error);
-          setError("Errore.Impossipible caricare i titpi di evento.");
-        }
-      };
-      fetchTipiEvento();
-    } else {
-      setTipoEvento([]);
-    }
-  }, [formData.categoriaId]);
-
   const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
+    const { name, value } = event.target;
+    if (name === "latitudine" || name === "longitudine" || name === "prezzo") {
+      setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -78,20 +111,17 @@ const AddEventiPage = () => {
     setLoading(true);
     setError("");
 
-    // Recupera l'utente dal localStorage per ottnere l'id
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || !user.id) {
-      setError("Utente non trovato.Effettua di nuovo il login");
+      setError("Utente non trovato. Effettua di nuovo il login");
       setLoading(false);
       return;
     }
 
     const eventoData = {
       ...formData,
+      dataOra: `${formData.dataOra}:00`,
       organizzatoreId: user.id,
-      latitudine: parseFloat(formData.latitudine),
-      longitudine: parseFloat(formData.longitudine),
-      prezzo: parseFloat(formData.prezzo),
     };
 
     try {
@@ -101,17 +131,18 @@ const AddEventiPage = () => {
     } catch (error) {
       console.error("Errore creazione evento:", error);
       setError(
-        "Errore durante la creazione dell'evento.Prego verificare i dati inseriti nel FORM"
+        "Errore durante la creazione dell'evento. Prego verificare i dati inseriti nel FORM"
       );
     } finally {
       setLoading(false);
     }
   };
+
   return (
-    <Container className="mt-5 ">
-      <Row className="justify-content-center">
+    <Container className="mt-5 navbar-glass ">
+      <Row className="justify-content-center ">
         <Col md={8}>
-          <h2 className="btn-glass">Crea un Nuovo Evento</h2>
+          <h2 className="btn-glass text-center">Crea un Nuovo Evento</h2>
           <Form onSubmit={handleSubmit}>
             {error && <Alert variant="danger">{error}</Alert>}
 
@@ -161,11 +192,12 @@ const AddEventiPage = () => {
                 <Form.Group className="mb-3">
                   <Form.Label>Tipo di Evento</Form.Label>
                   <Form.Control
-                    text="text"
-                    name="tipoEvento"
-                    value={formData.tipiEvento}
+                    type="text"
+                    name="tipoEventoNome"
+                    value={formData.tipoEventoNome}
                     onChange={handleChange}
                     placeholder="Inserisci il tipo di evento"
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -183,7 +215,7 @@ const AddEventiPage = () => {
             </Form.Group>
 
             <Row>
-              <Col md={6}>
+              <Col md={4}>
                 <Form.Group className="mb-3">
                   <Form.Label>Città</Form.Label>
                   <Form.Control
@@ -191,11 +223,23 @@ const AddEventiPage = () => {
                     name="citta"
                     value={formData.citta}
                     onChange={handleChange}
-                    required
+                    readOnly
                   />
                 </Form.Group>
               </Col>
-              <Col md={6}>
+              <Col md={4}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Via</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="via"
+                    value={formData.via}
+                    onChange={handleChange}
+                    readOnly
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4}>
                 <Form.Group className="mb-3">
                   <Form.Label>Regione</Form.Label>
                   <Form.Control
@@ -203,13 +247,14 @@ const AddEventiPage = () => {
                     name="regione"
                     value={formData.regione}
                     onChange={handleChange}
+                    readOnly
                   />
                 </Form.Group>
               </Col>
             </Row>
 
             <Row>
-              <Col md={4}>
+              <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Latitudine</Form.Label>
                   <Form.Control
@@ -218,11 +263,11 @@ const AddEventiPage = () => {
                     name="latitudine"
                     value={formData.latitudine}
                     onChange={handleChange}
-                    required
+                    readOnly
                   />
                 </Form.Group>
               </Col>
-              <Col md={4}>
+              <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Longitudine</Form.Label>
                   <Form.Control
@@ -231,23 +276,22 @@ const AddEventiPage = () => {
                     name="longitudine"
                     value={formData.longitudine}
                     onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Prezzo</Form.Label>
-                  <Form.Control
-                    type="number"
-                    step="any"
-                    name="prezzo"
-                    value={formData.prezzo}
-                    onChange={handleChange}
+                    readOnly
                   />
                 </Form.Group>
               </Col>
             </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Prezzo</Form.Label>
+              <Form.Control
+                type="number"
+                step="any"
+                name="prezzo"
+                value={formData.prezzo}
+                onChange={handleChange}
+              />
+            </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>URL Immagine</Form.Label>
@@ -259,10 +303,26 @@ const AddEventiPage = () => {
               />
             </Form.Group>
 
+            <Form.Group className="mb-3">
+              <Form.Label className=" btn-glass fs-5">
+                Seleziona Posizione sulla Mappa
+              </Form.Label>
+              <MapContainer
+                center={markerPosition}
+                zoom={13}
+                style={{ height: "400px", width: "100%" }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <LocationMarker />
+              </MapContainer>
+            </Form.Group>
+
             <Button
-              className="btn-glass"
               type="submit"
-              variant="success"
+              variant="success btn-glass "
               disabled={loading}
             >
               {loading ? (

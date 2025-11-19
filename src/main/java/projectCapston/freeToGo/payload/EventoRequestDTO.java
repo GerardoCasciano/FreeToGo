@@ -16,12 +16,13 @@ public record EventoRequestDTO(
         LocalDateTime dataOra,
         @NotBlank(message = "La città è obbligatoria")
         String citta,
+        String via,
         String regione,
         double latitudine,
         double longitudine,
         Double prezzo,
-        @NotNull(message = "L'ID del tipo di evento è obbligatorio")
-        UUID tipoEventoId,
+        @NotBlank(message = "Il nome del tipo di evento è obbligatorio")
+        String tipoEventoNome,
         @NotNull(message = "L'ID della categoria è obbligatorio")
         UUID categoriaId,
         @NotNull(message = "L'ID dell'organizzatore è obbligatorio")
