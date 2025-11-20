@@ -1,6 +1,6 @@
 package projectCapston.freeToGo.entities;
 
-import io.micrometer.observation.annotation.Observed;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;

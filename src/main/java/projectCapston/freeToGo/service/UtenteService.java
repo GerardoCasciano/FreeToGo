@@ -25,11 +25,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+import com.cloudinary.Cloudinary;
+    import org.springframework.web.multipart.MultipartFile;
+    import java.io.IOException;
+    import com.cloudinary.utils.ObjectUtils;
 @Service
 public class UtenteService implements UserDetailsService {
     @Autowired
     private UtenteRepository utenteRepository;
+    @Autowired
+    private Cloudinary cloudinary;
     @Autowired
     private RuoloRepository ruoloRepository;
     @Autowired
@@ -43,6 +48,12 @@ public class UtenteService implements UserDetailsService {
         return utenteRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con email: " + email));
     }
+    public Utente uploadAvatar(UUID id, MultipartFile file) throws IOException{
+        Utente utente = utenteRepository.findById(id).orElseThrow(()->new NotFoundException("Utente con Id" + id + "non trovato."));
+        String avatarUrl = (String) cloudinary.uploader().upload(file.getBytes(),ObjectUtils.emptyMap()).get("url");
+        utente.setAvatarUrl(avatarUrl);
+        return utenteRepository.save(utente);
+     }
 
     public AuthResponseDTO login(LoginRequestDTO loginRequest) {
         UserDetails userDetails = loadUserByUsername(loginRequest.email());

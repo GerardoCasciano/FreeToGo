@@ -1,7 +1,26 @@
-
 import api from "./api";
 
 const UTENTE_API_URL = "/api/utenti";
+
+const uploadAvatar = async (userId, file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  try {
+    const response = await api.post("/api/utenti/{userId}/avatar", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Errore durante l'upload dell'immagine ${userId}:`,
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
 
 const utenteService = {
   getAllUtenti: async () => {
@@ -48,6 +67,8 @@ const utenteService = {
       throw error;
     }
   },
+
+  uploadAvatar,
 };
 
 export default utenteService;

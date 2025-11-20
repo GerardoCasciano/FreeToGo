@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const NavBar = () => {
   const navigate = useNavigate();
   const isAuth = isAuthenticated();
+  const user = isAuth ? JSON.parse(localStorage.getItem("user")) : null;
 
   const handleLogout = () => {
     logout();
@@ -54,7 +55,11 @@ const NavBar = () => {
             {isAuth ? (
               <>
                 <RBImage
-                  src="bg-cartoon.jpg"
+                  src={
+                    user && user.avatarUrl
+                      ? user.avatarUrl
+                      : "/path/to/default-avatar.png"
+                  }
                   height="40"
                   width="40"
                   roundedCircle

@@ -90,28 +90,39 @@ const MyEventiPage = () => {
             <th>ID Evento</th>
             <th>Tipo di Evento</th>
             <th>Data Creazione</th>
-            <th>
-              <Button
-                variant="warning"
-                size="md"
-                className="me-2 btn-glass"
-                onClick={() => handleEdit(eventi.id)}
-              >
-                Modifica
-              </Button>
-            </th>
-            <th>
-              <Button
-                className="me-2 btn-glass"
-                variant="danger"
-                size="md"
-                onClick={() => handleDelete(eventi.id)}
-              >
-                Elimina
-              </Button>
-            </th>
+            <th>Modifica</th>
+            <th>Elimina</th>
           </tr>
         </thead>
+        <tbody>
+          {eventi.map((evento) => (
+            <tr key={evento.id}>
+              <td>{evento.id}</td>
+              <td>{evento.tipoEvento?.nome || "Non specificato"}</td>
+              <td>{moment(evento.dataCreazione).format("DD/MM/YYYY")}</td>
+              <td>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  className="me-2 tbn-glass"
+                  onClick={() => handleEdit(evento.id)}
+                >
+                  Modifica
+                </Button>
+              </td>
+              <td>
+                <Button
+                  className="me-2 btn-glass"
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(evento.id)}
+                >
+                  Elimina
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </Table>
     </Container>
   );

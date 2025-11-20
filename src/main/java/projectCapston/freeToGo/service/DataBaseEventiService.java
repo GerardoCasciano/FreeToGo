@@ -1,5 +1,6 @@
 package projectCapston.freeToGo.service;
 
+import com.github.victools.jsonschema.generator.SchemaKeyword;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +16,7 @@ import projectCapston.freeToGo.repositories.CategoriaRepository;
 import projectCapston.freeToGo.repositories.EventiRepository;
 import projectCapston.freeToGo.repositories.TipoDiEventoRepository;
 import projectCapston.freeToGo.repositories.UtenteRepository;
-
+import jakarta.persistence.EntityManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,10 +35,12 @@ public class DataBaseEventiService {
     private TipoDiEventoRepository tipoDiEventoRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
-
+    @Autowired EntityManager entityManager;
+    //Creo evento
+@Transactional
     public Eventi createEvento(EventoRequestDTO dto, Utente utenteAutenticato) {
-        Utente organizzatore = utenteRepository.findById(dto.organizzatoreId())
-                .orElseThrow(() -> new NotFoundException("Organizzatore con ID " + dto.organizzatoreId() + " non trovato."));
+        //L'utente è l'organizzatore che crea  l'evento
+    Utente organizzatore = utenteAutenticato;
 
         Categoria categoria = categoriaRepository.findById(dto.categoriaId())
                 .orElseThrow(() -> new NotFoundException("Categoria con ID " + dto.categoriaId() + " non trovata."));
@@ -47,6 +50,7 @@ public class DataBaseEventiService {
                     TipoDiEvento newTipoDiEvento = new TipoDiEvento();
                     newTipoDiEvento.setNome(dto.tipoEventoNome());
                     newTipoDiEvento.setCategoria(categoria);
+                    entityManager.flush();
                     return tipoDiEventoRepository.save(newTipoDiEvento);
                 });
 
@@ -70,14 +74,18 @@ public class DataBaseEventiService {
         nuovoEvento.setOrganizzatore(organizzatore);
         nuovoEvento.setUtente(utenteAutenticato);
         nuovoEvento.setDataCreazione(LocalDateTime.now());
+System.out.println("DEBUG: UTENTE AUTENTICATO (id) in createEvento:" + utenteAutenticato.getId());
+System.out.println("DEBUG. organizzatorre (id) in createEvento:" + organizzatore.getId());
 
-        return eventiRepository.save(nuovoEvento);
+Eventi savedEvento = eventiRepository.save(nuovoEvento);
+entityManager.flush();
+return savedEvento;
     }
     //Trova eventi tramite utente autenticato
-    public List<Eventi> findMyEventi(Utente utente){
-        return eventiRepository.findByOrganizzatoreId(utente.getId());
-    }
-
+public List<Eventi> findMyEventi(Utente utente){
+        System.out.println("DEBUG Utente (id) in findMyaEventi" + utente.getId());
+        return eventiRepository.findByutenteIdCustom(utente.getId());
+}
     //Salva nuovo evento
     public Eventi saveEvento(Eventi evento) {
         return eventiRepository.save(evento);
@@ -99,7 +107,8 @@ public class DataBaseEventiService {
         existingEvento.setLatitudine(updateEvento.getLatitudine());
         existingEvento.setLongitudine(updateEvento.getLongitudine());
         existingEvento.setPrezzo(updateEvento.getPrezzo());
-        //Salvo evevento aggionato
+
+        //Salvo evento aggiornato
         return eventiRepository.save(existingEvento);
     }
 

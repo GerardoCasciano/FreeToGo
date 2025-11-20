@@ -105,7 +105,7 @@ public class EventiController {
             //Se API fallisce, restituisci 503 Service Unavailable
             return ResponseEntity.status(503).body(searchResult);
         }
-        // Se la ricerca ha successo, restituisci 200 OK
+        // Se la ricerca ha successo, restituisce 200 OK
         return ResponseEntity.ok(searchResult);
     }
 
