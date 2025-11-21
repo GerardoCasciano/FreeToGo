@@ -3,20 +3,16 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import AppRoutes from "./rooutes/AppRoutes";
 
-import Homepage from "./components/Homepage";
-import InfoCards from "./components/InfoCards";
-import CategoriaAdminPage from "./page/CategorieAdminPage";
-import AdminRegistrazionePage from "./page/AdminRegistrazionePage";
-import LoginPage from "./page/LoginPage";
-import ResgistrazionePage from "./page/RegistrazionePage";
+import { AuthProvider } from "./components/AuthContext";
+
 function App() {
   return (
-    <>
+    <AuthProvider>
       <NavBar />
-      <main className="container">
+      <main>
         <AppRoutes />
       </main>
-    </>
+    </AuthProvider>
   );
 }
 

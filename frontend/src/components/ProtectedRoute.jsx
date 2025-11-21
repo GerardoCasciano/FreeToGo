@@ -1,11 +1,26 @@
-import { Children } from "react";
 import { isAuthenticated } from "../api/authService";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRpoute = ({ children }) => {
+const getCurrentUser = () => {
+  const userStr = localStorage.getItem("user");
+  if (userStr) {
+    const user = JSON.parse(userStr);
+    const roles = user.ruoli ? user.ruoli.split(",") : [];
+    return { ...user, roles };
+  }
+  return null;
+};
+const ProtectedRoute = ({ children, isAdmin }) => {
   if (!isAuthenticated()) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/logoin" />;
+  }
+  if (isAdmin) {
+    const currentUser = getCurrentUser();
+    if (!currentUser || !currentUser.roles.includes("ADMIN")) {
+      return <Navigate to="/" />;
+    }
   }
   return children;
 };
-export default ProtectedRpoute;
+
+export default ProtectedRoute;

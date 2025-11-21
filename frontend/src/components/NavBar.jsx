@@ -4,13 +4,13 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import RBImage from "react-bootstrap/Image";
 import "../assets/NavBar.css";
-import { isAuthenticated, logout } from "../api/authService";
+
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const isAuth = isAuthenticated();
-  const user = isAuth ? JSON.parse(localStorage.getItem("user")) : null;
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -39,7 +39,7 @@ const NavBar = () => {
             <Nav.Link className="btn-glass2  m-1" href="/">
               Home
             </Nav.Link>
-            {isAuth && (
+            {isAuthenticated && (
               <>
                 <Nav.Link className="btn-glass2 m-1" href="/eventi/add">
                   Aggiungi Evento
@@ -52,7 +52,7 @@ const NavBar = () => {
           </Nav>
 
           <Nav className="align-items-center">
-            {isAuth ? (
+            {isAuthenticated ? (
               <>
                 <RBImage
                   src={
@@ -68,17 +68,26 @@ const NavBar = () => {
                 <Button
                   className="me-3 rounded-pill btn-glass"
                   onClick={handleLogout}
+                  variant="danger"
                 >
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <Button className="me-3 rounded-pill btn-glass" href="/login">
+                <Button
+                  className="me-3 rounded-pill btn-glass"
+                  href="/login"
+                  variant="success"
+                >
                   Login
                 </Button>
 
-                <Button className="rounded-pill btn-glass" href="/register">
+                <Button
+                  className="rounded-pill btn-glass"
+                  href="/register"
+                  variant="success"
+                >
                   Registrati
                 </Button>
               </>

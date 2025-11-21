@@ -8,14 +8,16 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { login } from "../api/authService";
+import { login as authServiceLoign } from "../api/authService";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login: contextLogin } = useAuth();
 
   const handleChange = (event) => {
     setCredentials({
@@ -29,9 +31,9 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
     try {
-      const userData = await login(credentials);
+      const userData = await authServiceLoign(credentials);
 
-      localStorage.setItem("user", JSON.stringify(userData));
+      contextLogin(userData);
 
       console.log("Login eseguito con successo", userData);
 

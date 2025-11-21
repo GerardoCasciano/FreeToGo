@@ -33,13 +33,13 @@ const InfoCards = () => {
         <Col md={4}>
           <Card
             className=" shadow-sm custom-info-cards2  h-100 "
-            onClick={() => handleCardClick("Arte")}
+            onClick={() => handleCardClick("Arte,Eventi Culturali")}
             style={{ cursor: "pointer" }}
           >
             <Card.Img variant="top" src="/arte.jpg" />
             <Card.Body className="d-flex flex-column flex-grow-1">
               <Card.Title className="text-center  mb-3">
-                <h3>Arte</h3>
+                <h3>Arte-Eventi Culturali</h3>
               </Card.Title>
               <Card.Text className="text-center mt-auto ">
                 Esplora una vasta gamma di eventi legati al mondo dell'arte ,tra

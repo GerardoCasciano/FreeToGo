@@ -1,4 +1,4 @@
-package projectCapston.freeToGo.payload;
+package projectCapston.freeToGo.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
