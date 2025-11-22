@@ -10,6 +10,7 @@ import {
   Form,
 } from "react-bootstrap";
 import { useAuth } from "../components/AuthContext";
+
 const ProfiloPage = () => {
   const { user, updateUser, loading: authLoading } = useAuth();
   const [avatarFile, setAvatarFile] = useState(null);

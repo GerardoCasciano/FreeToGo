@@ -7,7 +7,7 @@ import { NavDropdown } from "react-bootstrap";
 import "../assets/NavBar.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../components/AuthContext";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -55,8 +55,10 @@ const NavBar = () => {
           <Nav className="align-items-center">
             {isAuthenticated ? (
               <NavDropdown
+                className="me-5"
+                noCaret
                 title={
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div>
                     <RBImage
                       src={
                         user?.avatarUrl
@@ -66,14 +68,14 @@ const NavBar = () => {
                       height="40"
                       width="40"
                       roundedCircle
-                      className="me-2"
+                      className="me-5  "
                       style={{ objectFit: "cover" }}
                     />
                     {user?.nome || user?.username || "Profilo"}
                   </div>
                 }
                 id="profile-dropdown"
-                align="end"
+                start="start"
               >
                 <NavDropdown.Item as={Link} to="/profilo">
                   <i className="bi bi-person-circle me-2"></i> Gestisci Profilo
@@ -81,7 +83,6 @@ const NavBar = () => {
 
                 <NavDropdown.Divider />
 
-                {/* Bottone Logout */}
                 <NavDropdown.Item onClick={handleLogout}>
                   <i className="bi bi-box-arrow-right me-2"></i> Logout
                 </NavDropdown.Item>
