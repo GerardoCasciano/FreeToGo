@@ -324,6 +324,7 @@ const AddEventiPage = () => {
               type="submit"
               variant="success btn-glass "
               disabled={loading}
+              className="mb-4"
             >
               {loading ? (
                 <Spinner as="span" animation="border" size="sm" />

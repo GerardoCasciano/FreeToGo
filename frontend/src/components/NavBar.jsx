@@ -55,10 +55,8 @@ const NavBar = () => {
           <Nav className="align-items-center">
             {isAuthenticated ? (
               <NavDropdown
-                className="me-5"
-                noCaret
                 title={
-                  <div>
+                  <>
                     <RBImage
                       src={
                         user?.avatarUrl
@@ -72,10 +70,11 @@ const NavBar = () => {
                       style={{ objectFit: "cover" }}
                     />
                     {user?.nome || user?.username || "Profilo"}
-                  </div>
+                  </>
                 }
                 id="profile-dropdown"
                 start="start"
+                aling="end"
               >
                 <NavDropdown.Item as={Link} to="/profilo">
                   <i className="bi bi-person-circle me-2"></i> Gestisci Profilo

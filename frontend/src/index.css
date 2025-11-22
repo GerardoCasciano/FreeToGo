@@ -21,10 +21,10 @@ background-color: #ffffff;
  }  
 
  body{
-  background-image:  linear-gradient(rgba(175, 175, 175, 0.5), rgba(255, 253, 253, 0.5)),url("../public/pop.jpg");
+  background-image:  linear-gradient(rgba(175, 175, 175, 0.774), rgba(27, 26, 26, 0.5)),url("../public/pop.jpg");
   background-repeat: no-repeat;
   background-size:cover ;
   background-position: center center;
-  min-height:100rem;
+  height:auto;
   
  }

@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import AppRoutes from "./rooutes/AppRoutes";
 
 import AuthProvider from "./components/Authprovider";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <main>
         <AppRoutes />
       </main>
+      <Footer />
     </AuthProvider>
   );
 }
