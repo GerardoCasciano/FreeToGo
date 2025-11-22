@@ -122,6 +122,6 @@ public class EventiController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID id) {
-        eventiService.deleteEvente(id);
+        eventiService.deleteEvento(id);
     }
 }

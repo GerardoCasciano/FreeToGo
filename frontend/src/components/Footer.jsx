@@ -1,5 +1,5 @@
-import React from "react";
 import "../assets/Footer.css";
+
 const Footer = () => {
   return (
     <footer className="footer">
@@ -11,6 +11,7 @@ const Footer = () => {
             eventi. Trova, condividi e vivi esperienze uniche.
           </p>
         </div>
+
         <div className="footer-section links">
           <h2 className="footer-title">Link Utili</h2>
           <ul>
@@ -28,6 +29,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
+
         <div className="footer-section social">
           <h2 className="footer-title">Seguici</h2>
           <div className="social-icons">
@@ -43,7 +45,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="footer-bottom">
+
+      <div className="footer-bottom text-center">
         <p>
           &copy; {new Date().getFullYear()} FreeToGo. Tutti i diritti riservati.
         </p>

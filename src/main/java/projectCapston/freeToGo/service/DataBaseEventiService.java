@@ -120,7 +120,7 @@ public List<Eventi> findMyEventi(Utente utente){
 
     //Elimina evento tramite id
     @Transactional
-    public void deleteEvente(UUID id) {
+    public void deleteEvento(UUID id) {
         if (!eventiRepository.existsById(id)) {
 
             throw new ResourseNotFoundException("Impossibile eliminare id non torvato." + id);
