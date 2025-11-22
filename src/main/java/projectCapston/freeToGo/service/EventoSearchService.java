@@ -47,6 +47,7 @@ public class EventoSearchService {
                 lowerPrompt.contains("sport") ||
                 lowerPrompt.contains("mostra") ||
                 lowerPrompt.contains("evento culturale") ||
+                lowerPrompt.contains("arte") ||
                 lowerPrompt.contains("partita");
     }
 
