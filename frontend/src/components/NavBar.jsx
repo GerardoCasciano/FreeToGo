@@ -3,8 +3,9 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import RBImage from "react-bootstrap/Image";
+import { NavDropdown } from "react-bootstrap";
 import "../assets/NavBar.css";
-
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
@@ -20,7 +21,7 @@ const NavBar = () => {
   return (
     <Navbar
       expand="lg"
-      className=" navbar-cartoon-font navbar-glass sticky-top"
+      className=" navbar-cartoon-font navbar-glass sticky-top "
       variant="dark"
       style={{ zIndex: 1050 }}
     >
@@ -53,26 +54,38 @@ const NavBar = () => {
 
           <Nav className="align-items-center">
             {isAuthenticated ? (
-              <>
-                <RBImage
-                  src={
-                    user && user.avatarUrl
-                      ? user.avatarUrl
-                      : "/path/to/default-avatar.png"
-                  }
-                  height="40"
-                  width="40"
-                  roundedCircle
-                  className="me-3"
-                />
-                <Button
-                  className="me-3 rounded-pill btn-glass"
-                  onClick={handleLogout}
-                  variant="danger"
-                >
-                  Logout
-                </Button>
-              </>
+              <NavDropdown
+                title={
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <RBImage
+                      src={
+                        user?.avatarUrl
+                          ? user.avatarUrl
+                          : "/path/to/default-avatar.png"
+                      }
+                      height="40"
+                      width="40"
+                      roundedCircle
+                      className="me-2"
+                      style={{ objectFit: "cover" }}
+                    />
+                    {user?.nome || user?.username || "Profilo"}
+                  </div>
+                }
+                id="profile-dropdown"
+                align="end"
+              >
+                <NavDropdown.Item as={Link} to="/profilo">
+                  <i className="bi bi-person-circle me-2"></i> Gestisci Profilo
+                </NavDropdown.Item>
+
+                <NavDropdown.Divider />
+
+                {/* Bottone Logout */}
+                <NavDropdown.Item onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-right me-2"></i> Logout
+                </NavDropdown.Item>
+              </NavDropdown>
             ) : (
               <>
                 <Button

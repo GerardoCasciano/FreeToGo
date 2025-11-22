@@ -8,6 +8,7 @@ background-color: #ffffff;
 
 
 
+
 }
 
  html, body, #root {                                                                                                                                                                                                            
@@ -18,3 +19,12 @@ background-color: #ffffff;
      display: flex;                                                                                                                                                                                                               
    flex-direction: column;                                                                                                                                                                                                      
  }  
+
+ body{
+  background-image:  linear-gradient(rgba(175, 175, 175, 0.5), rgba(255, 253, 253, 0.5)),url("../public/pop.jpg");
+  background-repeat: no-repeat;
+  background-size:cover ;
+  background-position: center center;
+  min-height:100rem;
+  
+ }

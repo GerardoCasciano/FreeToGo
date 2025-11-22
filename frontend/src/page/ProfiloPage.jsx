@@ -1,9 +1,17 @@
 import { useState } from "react";
 import utenteService from "../api/utenteService";
-import { Alert, Button, Col, Container, Row, Spinner } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Form,
+} from "react-bootstrap";
 import { useAuth } from "../components/AuthContext";
 const ProfiloPage = () => {
-  const [user] = useAuth();
+  const { user, updateUser, loading: authLoading } = useAuth();
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -23,9 +31,9 @@ const ProfiloPage = () => {
     setError("");
     setSuccess("");
     try {
-      const updatedUser = await utenteService.uploadAvatar(user.id, avatarFile);
+      const resultData = await utenteService.uploadAvatar(user.id, avatarFile);
 
-      updatedUser(updatedUser);
+      updateUser(resultData);
 
       setSuccess("Immagine del profilo aggiornata!");
       setAvatarFile(null);
@@ -36,9 +44,10 @@ const ProfiloPage = () => {
       setLoading(false);
     }
   };
-  if (!user) {
+  if (authLoading || !user) {
     <Container className="mt-5 text-center">
       <Spinner animation="border" roel="status">
+        <span className="visually-hidden">Caricamento...</span>
         <p>Caricamento del profilo...</p>
       </Spinner>
     </Container>;
@@ -49,14 +58,14 @@ const ProfiloPage = () => {
         <Col md={8}>
           <h2 className="btn-glass mb-4"> Il mio Profilo</h2>
           <img
-            src={user.avatarUrl || ""}
+            src={user.avatarUrl || "URL_DEL_TUO_AVATAR_DEFAULT"}
             alt="Avatar"
             className="mb-3 rounded-circle"
             style={{
               width: "150px",
               height: "150px",
               objectFit: "cover",
-              border: "4px solid #add",
+              border: "4px solid rgba(255, 255, 255, 0)",
             }}
           />
           <h3>{`${user.nome} ${user.cognome}`}</h3>
@@ -67,10 +76,11 @@ const ProfiloPage = () => {
             {success && <Alert variant="success">{success}</Alert>}
 
             <Form.Group controlId="formFile" className="mb-3">
-              <F1orom.Control type="file" onChange={handleFileChange} />
+              <Form.Control type="file" onChange={handleFileChange} />
             </Form.Group>
             <Button
-              varian="primary"
+              className="rounded-pill"
+              variant="success"
               type="submit"
               disabled={loading || !avatarFile}
             >

@@ -7,11 +7,15 @@ const uploadAvatar = async (userId, file) => {
   formData.append("avatar", file);
 
   try {
-    const response = await api.post("/api/utenti/{userId}/avatar", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.post(
+      `${UTENTE_API_URL}/${userId}/avatar`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(
