@@ -10,10 +10,16 @@ import {
   Form,
 } from "react-bootstrap";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { useAuth } from "../components/AuthContext";
 
 const ProfiloPage = () => {
   const { user, updateUser, loading: authLoading } = useAuth();
+=======
+import { useAuth } from "../hook/useAuth";
+const ProfiloPage = () => {
+  const { user, updatedUserData } = useAuth();
+>>>>>>> Stashed changes
 =======
 import { useAuth } from "../hook/useAuth";
 const ProfiloPage = () => {
@@ -41,7 +47,11 @@ const ProfiloPage = () => {
       const resultData = await utenteService.uploadAvatar(user.id, avatarFile);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       updateUser(resultData);
+=======
+      updatedUser(updatedUserData);
+>>>>>>> Stashed changes
 =======
       updatedUser(updatedUserData);
 >>>>>>> Stashed changes
@@ -56,6 +66,7 @@ const ProfiloPage = () => {
     }
   };
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   if (authLoading || !user) {
     <Container className="mt-5 text-center">
       <Spinner animation="border" roel="status">
@@ -64,6 +75,8 @@ const ProfiloPage = () => {
       </Spinner>
     </Container>;
 =======
+=======
+>>>>>>> Stashed changes
   if (!user) {
     return (
       <Container className="mt-5 text-center">
@@ -72,6 +85,9 @@ const ProfiloPage = () => {
         </Spinner>
       </Container>
     );
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   }
   return (
@@ -81,7 +97,11 @@ const ProfiloPage = () => {
           <h2 className="btn-glass mb-4"> Il mio Profilo</h2>
           <img
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             src={user.avatarUrl || "URL_DEL_TUO_AVATAR_DEFAULT"}
+=======
+            src={user.avatarUrl || "https://i.pravatar.cc/150"}
+>>>>>>> Stashed changes
 =======
             src={user.avatarUrl || "https://i.pravatar.cc/150"}
 >>>>>>> Stashed changes
@@ -106,8 +126,13 @@ const ProfiloPage = () => {
             </Form.Group>
             <Button
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               className="rounded-pill mb-2"
               variant="success"
+=======
+              className="rounded-pill btn-glass"
+              varian="success"
+>>>>>>> Stashed changes
 =======
               className="rounded-pill btn-glass"
               varian="success"

@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { useContext, createContext } from "react";
 
 const AuthContext = createContext(null);
@@ -12,6 +13,10 @@ export const useAuth = () => {
 =======
 import { createContext, useContext, useEffect, useState } from "react";
 
+=======
+import { createContext, useContext, useEffect, useState } from "react";
+
+>>>>>>> Stashed changes
 // 1. Componente Context
 const AuthContext = createContext(null);
 
@@ -109,6 +114,9 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth deve essere usato all'interno di AuthProvider");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   }
   return context;

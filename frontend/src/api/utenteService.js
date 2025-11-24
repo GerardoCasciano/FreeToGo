@@ -8,6 +8,7 @@ const uploadAvatar = async (userId, file) => {
 
   try {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     const response = await api.post(
       `${UTENTE_API_URL}/${userId}/avatar`,
       formData,
@@ -18,6 +19,8 @@ const uploadAvatar = async (userId, file) => {
       }
     );
 =======
+=======
+>>>>>>> Stashed changes
     const response = await api.post(`/api/utenti/${userId}/avatar`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
