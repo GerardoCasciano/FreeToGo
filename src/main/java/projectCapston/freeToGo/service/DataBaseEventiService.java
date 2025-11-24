@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.getId;
+
 
 @Service
 public class DataBaseEventiService {
@@ -81,12 +81,11 @@ Eventi savedEvento = eventiRepository.save(nuovoEvento);
 entityManager.flush();
 return savedEvento;
     }
-    //Trova eventi tramite utente autenticato
-public List<Eventi> findMyEventi(Utente utente){
-        System.out.println("DEBUG Utente (id) in findMyaEventi" + utente.getId());
-        return eventiRepository.findByutenteIdCustom(utente.getId());
-}
-    //Salva nuovo evento
+        //Trova eventi tramite utente autenticato
+        public List<Eventi> findMyEventi(Utente utente){
+            System.out.println("DEBUG Utente (id) in findMyaEventi" + utente.getId());
+            return eventiRepository.findByOrganizzatore_Id(utente.getId());
+        }    //Salva nuovo evento
     public Eventi saveEvento(Eventi evento) {
         return eventiRepository.save(evento);
     }
@@ -111,6 +110,7 @@ public List<Eventi> findMyEventi(Utente utente){
         //Salvo evento aggiornato
         return eventiRepository.save(existingEvento);
     }
+
 
     //Trova evento tramite id
     public Eventi findById(UUID id) {

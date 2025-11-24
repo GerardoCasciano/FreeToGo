@@ -68,6 +68,7 @@ public PasswordEncoder passwordEncoder(){
                         .requestMatchers(HttpMethod.POST, "/api/utenti").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/categoria/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/eventi/**").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/utenti/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());

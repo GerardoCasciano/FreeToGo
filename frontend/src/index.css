@@ -21,7 +21,7 @@ background-color: #ffffff;
  }  
 
  body{
-  background-image:  linear-gradient(rgba(175, 175, 175, 0.774), rgba(27, 26, 26, 0.5)),url("../public/pop.jpg");
+  background-image:  linear-gradient(rgba(175, 175, 175, 0.774), rgba(27, 26, 26, 0.5)),url("../public/FreeToGO!.png");
   background-repeat: no-repeat;
   background-size:cover ;
   background-position: center center;

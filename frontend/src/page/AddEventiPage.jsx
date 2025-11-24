@@ -1,5 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import "leaflet/dist/leaflet.css";
+
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
+import L from "leaflet";
+
 import {
   Form,
   Button,
@@ -10,9 +21,6 @@ import {
   Alert,
 } from "react-bootstrap";
 import eventiService from "../api/eventiService";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L, { setOptions } from "leaflet";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -22,7 +30,24 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
+function MapRecenter({ center }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (center.lat !== 0 || center.lng !== 0) {
+      map.flyTo(center, map.getZoom() || 13, {
+        animate: true,
+        duration: 1.5,
+      });
+    }
+  }, [center, map]);
+
+  return null;
+}
+
 const AddEventiPage = () => {
+  const DEFAULT_POSITION = { lat: 41.9027835, lng: 12.4963655 };
+
   const [formData, setFormData] = useState({
     titolo: "",
     descrizione: "",
@@ -31,8 +56,9 @@ const AddEventiPage = () => {
     citta: "",
     via: "",
     regione: "",
-    latitudine: 0,
-    longitudine: 0,
+
+    latitudine: DEFAULT_POSITION.lat,
+    longitudine: DEFAULT_POSITION.lng,
     prezzo: 0,
     categoriaId: "",
     tipoEventoNome: "",
@@ -42,85 +68,23 @@ const AddEventiPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [markerPosition, setMarkerPosition] = useState({
-    lat: 41.902782,
-    lng: 12.496366,
-  }); // Default to Rome
 
-  // Componente per gestire gli eventi della mappa
-  function LocationMarker() {
-    useMapEvents({
-      click(e) {
-        setMarkerPosition(e.latlng);
-        setFormData((prev) => ({
-          ...prev,
-          latitudine: e.latlng.lat,
-          longitudine: e.latlng.lng,
-        }));
+  const [addressInputTimer, setAddressInputTimer] = useState(null);
 
-        fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setFormData((prev) => ({
-              ...prev,
-              citta:
-                data.address.city ||
-                data.address.town ||
-                data.address.village ||
-                "",
-              via: data.address.road || "", // Get street name
-              regione: data.address.state || data.address.country || "",
-            }));
-          })
-          .catch((error) =>
-            console.error("Error during reverse geocoding:", error)
-          );
-      },
-    });
-
-    return markerPosition ? <Marker position={markerPosition}></Marker> : null;
-  }
-
-  // Funzione per caricare le categorie al montaggio del componente
-  useEffect(() => {
-    const fetchCategorie = async () => {
-      try {
-        const data = await eventiService.getAllCategorie();
-        setCategorie(data);
-      } catch (error) {
-        console.error("Errore fetch categorie:", error);
-        setError("Errore.Impossibile caricare le categorie.");
-      }
-    };
-    fetchCategorie();
-  }, []);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name === "citta" || name === "via" || name === "rergione") {
-      handleAddressChange(event);
-    } else if (
-      name === "latitudine" ||
-      name === "longitudine" ||
-      name === "prezzo"
-    ) {
-      setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
   const geocodeAddress = async (citta, via, regione) => {
+    if (!citta || !via) return;
+
     const address = `${via}, ${citta}, ${regione}, Italy`;
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
       address
     )}&format=json&limit=1`;
+
     try {
       const response = await fetch(url);
       const data = await response.json();
-      if (data && data.lengt > 0) {
-        const lat = parseFloat([0].lat);
+
+      if (data && data.length > 0) {
+        const lat = parseFloat(data[0].lat);
         const lng = parseFloat(data[0].lon);
 
         setFormData((prev) => ({
@@ -132,25 +96,101 @@ const AddEventiPage = () => {
         console.warn("Geocoding non riuscito per l'indirizzo:", address);
       }
     } catch (error) {
-      console.error("Errore durante la geocodifica", error);
+      console.error("Errore durante la geocodifica:", error);
     }
   };
-  const handleAddressChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => {
-      const newFormData = { ...prev, [name]: value };
 
-      if (name === "citta" || name === "via") {
-        geocodeAddress(newFormData.citta, newFormData.via, newFormData.regione);
+  function LocationMarker() {
+    const markerPosition = [formData.latitudine, formData.longitudine];
+
+    useMapEvents({
+      click(e) {
+        const { lat, lng } = e.latlng;
+
+        setFormData((prev) => ({
+          ...prev,
+          latitudine: lat,
+          longitudine: lng,
+        }));
+
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setFormData((prev) => ({
+              ...prev,
+              citta:
+                data.address.city ||
+                data.address.town ||
+                data.address.village ||
+                "",
+              via: data.address.road || "",
+              regione: data.address.state || data.address.country || "",
+            }));
+          })
+          .catch((error) =>
+            console.error("Errore nel geocoding inverso:", error)
+          );
+      },
+    });
+
+    return (
+      (formData.latitudine !== 0 || formData.longitudine !== 0) && (
+        <Marker position={markerPosition} />
+      )
+    );
+  }
+
+  useEffect(() => {
+    const fetchCategoria = async () => {
+      try {
+        const data = await eventiService.getAllCategorie();
+        setCategorie(data);
+      } catch (error) {
+        console.error("Errore fetch categoria:", error);
+        setError("Errore. Impossibile caricare la categoria.");
+      }
+    };
+    fetchCategoria();
+  }, []);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    let newValue = value;
+
+    if (addressInputTimer) {
+      clearTimeout(addressInputTimer);
+    }
+
+    if (name === "latitudine" || name === "longitudine" || name === "prezzo") {
+      newValue = parseFloat(value) || 0;
+    }
+
+    setFormData((prev) => {
+      const newFormData = { ...prev, [name]: newValue };
+
+      if (name === "citta" || name === "via" || name === "regione") {
+        const newTimer = setTimeout(() => {
+          geocodeAddress(
+            newFormData.citta,
+            newFormData.via,
+            newFormData.regione
+          );
+        }, 1000);
+
+        setAddressInputTimer(newTimer);
       }
       return newFormData;
     });
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     setError("");
 
+    // Recupero Utente
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || !user.id) {
       setError("Utente non trovato. Effettua di nuovo il login");
@@ -158,12 +198,19 @@ const AddEventiPage = () => {
       return;
     }
 
+    // Preparazione Dati per l'API
     const eventoData = {
       ...formData,
-      dataOra: `${formData.dataOra}:00`,
+
+      latitudine: parseFloat(formData.latitudine),
+      longitudine: parseFloat(formData.longitudine),
+      prezzo: parseFloat(formData.prezzo),
       organizzatoreId: user.id,
+
+      dataOra: `${formData.dataOra}:00`,
     };
 
+    // Chiamata API
     try {
       await eventiService.createEvento(eventoData);
       alert("Evento creato con successo!");
@@ -179,10 +226,10 @@ const AddEventiPage = () => {
   };
 
   return (
-    <Container className="mt-5 navbar-glass ">
-      <Row className="justify-content-center ">
+    <Container className="mt-5 ">
+      <Row className="justify-content-center">
         <Col md={8}>
-          <h2 className="btn-glass text-center mt-2">Crea un Nuovo Evento</h2>
+          <h2 className="btn-glass text-center">Crea un Nuovo Evento</h2>
           <Form onSubmit={handleSubmit}>
             {error && <Alert variant="danger">{error}</Alert>}
 
@@ -236,7 +283,7 @@ const AddEventiPage = () => {
                     name="tipoEventoNome"
                     value={formData.tipoEventoNome}
                     onChange={handleChange}
-                    placeholder="Inserisci il tipo di evento"
+                    placeholder="Es. Concerto, Mostra, Lezione"
                     required
                   />
                 </Form.Group>
@@ -254,6 +301,7 @@ const AddEventiPage = () => {
               />
             </Form.Group>
 
+            {/* SEZIONE INDIRIZZO (Attiva Geocodifica e Mappa) */}
             <Row>
               <Col md={4}>
                 <Form.Group className="mb-3">
@@ -263,6 +311,7 @@ const AddEventiPage = () => {
                     name="citta"
                     value={formData.citta}
                     onChange={handleChange}
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -274,6 +323,7 @@ const AddEventiPage = () => {
                     name="via"
                     value={formData.via}
                     onChange={handleChange}
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -291,8 +341,34 @@ const AddEventiPage = () => {
             </Row>
 
             <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
+              <Col md={12}>
+                <Form.Label>
+                  📍 Posizione Evento (clicca sulla mappa per selezionare)
+                </Form.Label>
+                <MapContainer
+                  center={[formData.latitudine, formData.longitudine]}
+                  zoom={13}
+                  style={{ height: "300px", width: "100%" }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  />
+
+                  <MapRecenter
+                    center={{
+                      lat: formData.latitudine,
+                      lng: formData.longitudine,
+                    }}
+                  />
+                  <LocationMarker />
+                </MapContainer>
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Col md={4}>
+                <Form.Group>
                   <Form.Label>Latitudine</Form.Label>
                   <Form.Control
                     type="number"
@@ -300,12 +376,13 @@ const AddEventiPage = () => {
                     name="latitudine"
                     value={formData.latitudine}
                     onChange={handleChange}
+                    required
                     readOnly
                   />
                 </Form.Group>
               </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
+              <Col md={4}>
+                <Form.Group>
                   <Form.Label>Longitudine</Form.Label>
                   <Form.Control
                     type="number"
@@ -313,24 +390,26 @@ const AddEventiPage = () => {
                     name="longitudine"
                     value={formData.longitudine}
                     onChange={handleChange}
+                    required
                     readOnly
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group>
+                  <Form.Label>Prezzo (€)</Form.Label>
+                  <Form.Control
+                    type="number"
+                    step="any"
+                    name="prezzo"
+                    value={formData.prezzo}
+                    onChange={handleChange}
                   />
                 </Form.Group>
               </Col>
             </Row>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Prezzo</Form.Label>
-              <Form.Control
-                type="number"
-                step="any"
-                name="prezzo"
-                value={formData.prezzo}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3 mt-3">
               <Form.Label>URL Immagine</Form.Label>
               <Form.Control
                 type="url"
@@ -340,29 +419,11 @@ const AddEventiPage = () => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label className=" btn-glass fs-5 p-1">
-                Seleziona Posizione sulla Mappa
-              </Form.Label>
-              <MapContainer
-                center={markerPosition}
-                zoom={13}
-                style={{ height: "400px", width: "100%" }}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <LocationMarker />
-              </MapContainer>
-            </Form.Group>
-
             <Button
+              className="btn-glass mb-4"
               type="submit"
-              variant="success btn-glass "
+              variant="success"
               disabled={loading}
-              className="mb-4 rounded-pill "
-              size="10px"
             >
               {loading ? (
                 <Spinner as="span" animation="border" size="sm" />

@@ -80,7 +80,7 @@ const ProfiloPage = () => {
               <Form.Control type="file" onChange={handleFileChange} />
             </Form.Group>
             <Button
-              className="rounded-pill"
+              className="rounded-pill mb-2"
               variant="success"
               type="submit"
               disabled={loading || !avatarFile}
