@@ -4,16 +4,15 @@ export const login = async (credentials) => {
   try {
     const response = await api.post("/api/auth/login", credentials);
     if (response.data && response.data.accessToken) {
-      const token = response.data.accessToken;
-      localStorage.setItem("token", token);
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const { accessToken: _, ...userData } = response.data;
-      localStorage.setItem("user", JSON.stringify(userData));
-      return userData;
+      // Salva il token direttamente qui, come facevi prima
+      localStorage.setItem("token", response.data.accessToken);
+      // Ritorna l'intero oggetto data dal backend, inclusi token e dati utente
+      return response.data;
     }
-    return response.data;
+    // Se non c'è accessToken, potremmo voler lanciare un errore o gestire diversamente
+    throw new Error("Login fallito: Nessun token di accesso ricevuto.");
   } catch (error) {
-    console.error("Login fallito:", error.respomse?.data || error.message);
+    console.error("Login fallito:", error.response?.data || error.message);
     throw error;
   }
 };

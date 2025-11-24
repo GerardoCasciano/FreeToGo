@@ -9,10 +9,16 @@ import {
   Spinner,
   Form,
 } from "react-bootstrap";
+<<<<<<< Updated upstream
 import { useAuth } from "../components/AuthContext";
 
 const ProfiloPage = () => {
   const { user, updateUser, loading: authLoading } = useAuth();
+=======
+import { useAuth } from "../hook/useAuth";
+const ProfiloPage = () => {
+  const { user, updatedUserData } = useAuth();
+>>>>>>> Stashed changes
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -34,7 +40,11 @@ const ProfiloPage = () => {
     try {
       const resultData = await utenteService.uploadAvatar(user.id, avatarFile);
 
+<<<<<<< Updated upstream
       updateUser(resultData);
+=======
+      updatedUser(updatedUserData);
+>>>>>>> Stashed changes
 
       setSuccess("Immagine del profilo aggiornata!");
       setAvatarFile(null);
@@ -45,6 +55,7 @@ const ProfiloPage = () => {
       setLoading(false);
     }
   };
+<<<<<<< Updated upstream
   if (authLoading || !user) {
     <Container className="mt-5 text-center">
       <Spinner animation="border" roel="status">
@@ -52,6 +63,16 @@ const ProfiloPage = () => {
         <p>Caricamento del profilo...</p>
       </Spinner>
     </Container>;
+=======
+  if (!user) {
+    return (
+      <Container className="mt-5 text-center">
+        <Spinner animation="border" roel="status">
+          <p>Caricamento del profilo...</p>
+        </Spinner>
+      </Container>
+    );
+>>>>>>> Stashed changes
   }
   return (
     <Container className="mt-5 navbar-glass p-4 rounded">
@@ -59,7 +80,11 @@ const ProfiloPage = () => {
         <Col md={8}>
           <h2 className="btn-glass mb-4"> Il mio Profilo</h2>
           <img
+<<<<<<< Updated upstream
             src={user.avatarUrl || "URL_DEL_TUO_AVATAR_DEFAULT"}
+=======
+            src={user.avatarUrl || "https://i.pravatar.cc/150"}
+>>>>>>> Stashed changes
             alt="Avatar"
             className="mb-3 rounded-circle"
             style={{
@@ -80,8 +105,13 @@ const ProfiloPage = () => {
               <Form.Control type="file" onChange={handleFileChange} />
             </Form.Group>
             <Button
+<<<<<<< Updated upstream
               className="rounded-pill mb-2"
               variant="success"
+=======
+              className="rounded-pill btn-glass"
+              varian="success"
+>>>>>>> Stashed changes
               type="submit"
               disabled={loading || !avatarFile}
             >
@@ -94,7 +124,6 @@ const ProfiloPage = () => {
                     role="status"
                     aria-hidden="true"
                   />
-                  {""}
                   Caricamento...
                 </>
               ) : (

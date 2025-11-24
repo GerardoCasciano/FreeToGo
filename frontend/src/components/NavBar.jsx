@@ -3,11 +3,18 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import RBImage from "react-bootstrap/Image";
+<<<<<<< Updated upstream
 import { NavDropdown } from "react-bootstrap";
+=======
+import { useAuth } from "../hook/useAuth";
+>>>>>>> Stashed changes
 import "../assets/NavBar.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+<<<<<<< Updated upstream
 import { useAuth } from "../components/AuthContext";
+=======
+>>>>>>> Stashed changes
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -54,6 +61,7 @@ const NavBar = () => {
 
           <Nav className="align-items-center">
             {isAuthenticated ? (
+<<<<<<< Updated upstream
               <NavDropdown
                 title={
                   <>
@@ -86,6 +94,30 @@ const NavBar = () => {
                   <i className="bi bi-box-arrow-right me-2"></i> Logout
                 </NavDropdown.Item>
               </NavDropdown>
+=======
+              <>
+                <Nav.Link className="btn-glass2 m-1" href="/profilo">
+                  Profilo
+                </Nav.Link>
+                <RBImage
+                  src={user?.avatarUrl || "https://i.pravatar.cc/150"}
+                  alt="Avatar Utente"
+                  height="40"
+                  width="40"
+                  roundedCircle
+                  className="me-3"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate("/profilo")}
+                />
+                <Button
+                  className="me-3 rounded-pill btn-glass"
+                  onClick={handleLogout}
+                  variant="danger"
+                >
+                  Logout
+                </Button>
+              </>
+>>>>>>> Stashed changes
             ) : (
               <>
                 <Button

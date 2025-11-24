@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { login as authServiceLoign } from "../api/authService";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import { useAuth } from "../hook/useAuth";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
