@@ -75,14 +75,19 @@ const MyEventiPage = () => {
     return (
       <Container className=" mt-5 text-center navbar-glass">
         <h2>Non hai ancora creato nessun evento.</h2>
-        <Button variant="success" onClick={() => navigate("/eventi/add")}>
+        <Button
+          className="rounded-pill mb-2"
+          size="5px"
+          variant="success"
+          onClick={() => navigate("/eventi/add")}
+        >
           Crea Evento
         </Button>
       </Container>
     );
   }
   return (
-    <Container className="mt-5 navbar-glass ">
+    <Container className="mt-5 navbar-glass m-0 p-0  ">
       <h2 className="mb-4 text-center btn-glass ">I miei eventi</h2>
       <Table striped bordered responsive>
         <thead>

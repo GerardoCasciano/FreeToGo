@@ -12,7 +12,7 @@ import {
 
 import categoriaService from "../api/categoriaService";
 
-// Lista delle categorie permesse
+//  categorie permesse
 const CATEGORIE_PERMESSE = [
   "CONCERTO",
   "MUSEO",
@@ -34,9 +34,7 @@ const CategoriaAdminPage = () => {
   const [nuovaDescrizione, setNuovaDescrizione] = useState("");
   const [erroreAggiunta, setErroreAggiunta] = useState(null);
 
-  //  GESTIONE
-
-  // 1. Funzione per il recupero categorie
+  //  recupero categorie
   const fetchCategorie = async () => {
     try {
       setCaricamento(true);
@@ -94,12 +92,11 @@ const CategoriaAdminPage = () => {
       console.error("Creazione categoria FALLITA!", err);
     }
   };
-  // HOOKS
+
   useEffect(() => {
     fetchCategorie();
   }, []);
 
-  // RENDER
   return (
     <Container className="mt-4">
       <h2>Gestione Categorie</h2>

@@ -12,7 +12,7 @@ import {
 import eventiService from "../api/eventiService";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import L, { setOptions } from "leaflet";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -99,13 +99,53 @@ const AddEventiPage = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name === "latitudine" || name === "longitudine" || name === "prezzo") {
+    if (name === "citta" || name === "via" || name === "rergione") {
+      handleAddressChange(event);
+    } else if (
+      name === "latitudine" ||
+      name === "longitudine" ||
+      name === "prezzo"
+    ) {
       setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
+  const geocodeAddress = async (citta, via, regione) => {
+    const address = `${via}, ${citta}, ${regione}, Italy`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+      address
+    )}&format=json&limit=1`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data && data.lengt > 0) {
+        const lat = parseFloat([0].lat);
+        const lng = parseFloat(data[0].lon);
 
+        setFormData((prev) => ({
+          ...prev,
+          latitudine: lat,
+          longitudine: lng,
+        }));
+      } else {
+        console.warn("Geocoding non riuscito per l'indirizzo:", address);
+      }
+    } catch (error) {
+      console.error("Errore durante la geocodifica", error);
+    }
+  };
+  const handleAddressChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => {
+      const newFormData = { ...prev, [name]: value };
+
+      if (name === "citta" || name === "via") {
+        geocodeAddress(newFormData.citta, newFormData.via, newFormData.regione);
+      }
+      return newFormData;
+    });
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -142,7 +182,7 @@ const AddEventiPage = () => {
     <Container className="mt-5 navbar-glass ">
       <Row className="justify-content-center ">
         <Col md={8}>
-          <h2 className="btn-glass text-center">Crea un Nuovo Evento</h2>
+          <h2 className="btn-glass text-center mt-2">Crea un Nuovo Evento</h2>
           <Form onSubmit={handleSubmit}>
             {error && <Alert variant="danger">{error}</Alert>}
 
@@ -223,7 +263,6 @@ const AddEventiPage = () => {
                     name="citta"
                     value={formData.citta}
                     onChange={handleChange}
-                    readOnly
                   />
                 </Form.Group>
               </Col>
@@ -235,7 +274,6 @@ const AddEventiPage = () => {
                     name="via"
                     value={formData.via}
                     onChange={handleChange}
-                    readOnly
                   />
                 </Form.Group>
               </Col>
@@ -247,7 +285,6 @@ const AddEventiPage = () => {
                     name="regione"
                     value={formData.regione}
                     onChange={handleChange}
-                    readOnly
                   />
                 </Form.Group>
               </Col>
@@ -304,7 +341,7 @@ const AddEventiPage = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label className=" btn-glass fs-5">
+              <Form.Label className=" btn-glass fs-5 p-1">
                 Seleziona Posizione sulla Mappa
               </Form.Label>
               <MapContainer
@@ -324,7 +361,8 @@ const AddEventiPage = () => {
               type="submit"
               variant="success btn-glass "
               disabled={loading}
-              className="mb-4"
+              className="mb-4 rounded-pill "
+              size="10px"
             >
               {loading ? (
                 <Spinner as="span" animation="border" size="sm" />

@@ -53,7 +53,6 @@ const EditEventiPage = () => {
     setLoading(true);
     setError("");
 
-    // Assicurati che la data sia nel formato ISO 8601 corretto per il backend
     const eventoData = {
       ...formData,
       dataOra: moment(formData.dataOra).toISOString(),
@@ -152,7 +151,7 @@ const EditEventiPage = () => {
               type="submit"
               variant="success"
               disabled={loading}
-              className="mt-3"
+              className="mt-3 rounded-pill"
             >
               {loading ? "Salvataggio..." : "Salva Modifiche"}
             </Button>

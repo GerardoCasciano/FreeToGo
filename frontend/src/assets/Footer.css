@@ -3,34 +3,32 @@
     background-color: #333;
     color: #f2f2f2;
     font-family: 'Arial', sans-serif;
-    padding: 20px 0; 
+    padding: 0px;
+    margin-top: 500px; 
 }
 
 
 .footer-container {
     display: flex;
     flex-wrap: wrap; 
-    justify-content: space-around;
+ 
     max-width: 1200px;
     margin: auto;
-    padding: 0 20px; 
+    padding:  0px; 
 }
 
 
 .footer-section {
    
-    flex: 1 1 280px; 
+    flex: 1px; 
     
 
-    margin: 10px; 
+    margin: 1px; 
     text-align: center; 
 
 }
 
-.footer-section.about p {
-    line-height: 1.6;
-    margin: 15px;
-}
+
  
 .footer-section.links ul {
     list-style: none;
@@ -41,7 +39,7 @@
 .footer-section.links a {
     color: #f2f2f2;
     text-decoration: none;
-    line-height: 2;
+ 
     transition: color 0.3s ease;
    
 }
@@ -61,4 +59,7 @@
     font-size: 1.5rem;
     text-decoration: none;
     transition: color 0.3s ease;
+}
+.social-icons a:hover{
+     color: #ddca1d;
 }
