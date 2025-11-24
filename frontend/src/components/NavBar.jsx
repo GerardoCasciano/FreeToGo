@@ -5,7 +5,11 @@ import Navbar from "react-bootstrap/Navbar";
 import RBImage from "react-bootstrap/Image";
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { NavDropdown } from "react-bootstrap";
+=======
+import { useAuth } from "../hook/useAuth";
+>>>>>>> Stashed changes
 =======
 import { useAuth } from "../hook/useAuth";
 >>>>>>> Stashed changes
@@ -17,7 +21,10 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { useAuth } from "../components/AuthContext";
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
