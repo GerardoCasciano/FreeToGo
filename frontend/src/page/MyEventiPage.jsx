@@ -117,7 +117,7 @@ const MyEventiPage = () => {
               </td>
               <td>
                 <Button
-                  className="me-2 btn-glass"
+                  className="me-2 btn-glass mb-2"
                   variant="danger"
                   size="sm"
                   onClick={() => handleDelete(evento.id)}

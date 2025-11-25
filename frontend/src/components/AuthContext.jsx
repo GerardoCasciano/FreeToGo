@@ -1,28 +1,6 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-import { useContext, createContext } from "react";
-
-const AuthContext = createContext(null);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error(
-      "useAuth deve essere utilizzato all'ineterno di AuthProvider"
-    );
-=======
 import { createContext, useContext, useEffect, useState } from "react";
 
-=======
-import { createContext, useContext, useEffect, useState } from "react";
-
->>>>>>> Stashed changes
-=======
-import { createContext, useContext, useEffect, useState } from "react";
-
->>>>>>> Stashed changes
-// 1. Componente Context
+//  Componente Context
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -119,13 +97,6 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth deve essere usato all'interno di AuthProvider");
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
   }
   return context;
 };
