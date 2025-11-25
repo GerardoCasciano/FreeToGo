@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 public class GoogleService {
-    private static final  String CATEGORIES_PERMESSE= "eventi culturali , musica, concerti ,sagre,teatro e sport.";
+    private static final  String CATEGORIES_PERMESSE= "eventi culturali , musica, arte ,sagre,teatro e sport.";
 
     @Value("${serpapi.baseurl}")
     private String baseUrl;
@@ -43,8 +43,9 @@ public class GoogleService {
                 lowerPrompt.contains("sport") ||
                 lowerPrompt.contains("mostra") ||
                 lowerPrompt.contains("musica") ||
-                lowerPrompt.contains("evento culturale") ||
-                lowerPrompt.contains("partita");
+                lowerPrompt.contains("arte") ||
+                lowerPrompt.contains("evento culturale");
+
  }
     public GoogleDTO executeSearch(String userPrompt) {
         //Filtro per cintrollo prima di chiamare  SerpApi

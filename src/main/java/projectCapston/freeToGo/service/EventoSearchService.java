@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class EventoSearchService {
     //Lista categorie permesse per messaggio di validazione o errore
-    private static final String CATEGORIE_PERMESSE = "eventi culturali, musica, concerti, sagre, musei, teatro, sport";
+    private static final String CATEGORIE_PERMESSE = "eventi culturali, musica, arte,concerti, sagre, musei, teatro, sport";
 
     @Value("${serpapi.baseurl}")
     private String baseUrl;
@@ -47,6 +47,7 @@ public class EventoSearchService {
                 lowerPrompt.contains("sport") ||
                 lowerPrompt.contains("mostra") ||
                 lowerPrompt.contains("evento culturale") ||
+                lowerPrompt.contains("arte") ||
                 lowerPrompt.contains("partita");
     }
 

@@ -8,6 +8,7 @@ import projectCapston.freeToGo.payload.CategoriaRequestDTO;
 import projectCapston.freeToGo.payload.CategoriaResponseDTO;
 import projectCapston.freeToGo.service.CategoriaService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,6 +16,11 @@ import java.util.UUID;
 public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
+
+    @GetMapping
+    public List<CategoriaResponseDTO> findAll(){
+        return categoriaService.findAll();
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,0 +1,25 @@
+  
+.custom-info-cards .card-body{
+  background-color: rgb(250, 204, 79);
+transform: rotate(2deg);
+ transition: transform 0.3s ease-in-out;
+}
+.custom-info-cards2 .card-body{
+  background-color: rgb(250, 204, 79);
+  transform: rotate(-2deg);
+ transition: transform 0.3s ease-in-out;
+}
+.custom-info-cards3 .card-body {
+  background-color: rgb(250, 204, 79);
+    transform: rotate(-2deg);
+ transition: transform 0.3s ease-in-out;
+}
+.custom-info-cards .card-body:hover{
+  transform: rotate(0deg) scale(1.05);
+}
+.custom-info-cards2 .card-body:hover{
+  transform: rotate(0deg) scale(1.05);
+}
+.custom-info-cards3 .card-body:hover{
+  transform: rotate(0deg) scale(1.05);
+}

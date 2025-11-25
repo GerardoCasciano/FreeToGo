@@ -34,6 +34,10 @@ public class Eventi {
     private LocalDateTime dataOra;
     @Column(name = "citta", nullable = false)
     private String citta;
+    @Column(name = "via")
+    private String via;
+    @Column(name = "regione")
+    private String regione;
     @Column(name = "latitudine", nullable = false)
     private double latitudine;
     @Column(name = "longitudine", nullable = false)

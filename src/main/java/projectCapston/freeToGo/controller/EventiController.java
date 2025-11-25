@@ -1,7 +1,7 @@
 package projectCapston.freeToGo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,13 +16,15 @@ import projectCapston.freeToGo.service.DataBaseEventiService;
 import projectCapston.freeToGo.service.EventoSearchService;
 import projectCapston.freeToGo.service.UtenteService;
 
-import java.time.LocalDate;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/eventi")
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EventiController {
     @Autowired
     private DataBaseEventiService eventiService;
@@ -40,11 +42,15 @@ public class EventiController {
         return new EventiResponseDTO(
                 nuovoEvento.getId(),
                 nuovoEvento.getTitolo(),
-                nuovoEvento.getTipoEvento().getCategoria().getNome(),
+                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getDescrizione(),
                 nuovoEvento.getAvatarUrl(),
                 nuovoEvento.getDataOra(),
                 nuovoEvento.getCitta(),
+                nuovoEvento.getVia(),
+                nuovoEvento.getRegione(),
+                nuovoEvento.getTipoEvento().getNome(),
+                nuovoEvento.getCategoria().getNome(),
                 nuovoEvento.getLatitudine(),
                 nuovoEvento.getLongitudine(),
                 nuovoEvento.getPrezzo(),
@@ -53,7 +59,34 @@ public class EventiController {
                 nuovoEvento.getDataUltimaModifica()
         );
     }
+//Eventi creati dall'utente autenticato
+    @GetMapping("/me")
+    public List<EventiResponseDTO> getMyEventi(@AuthenticationPrincipal Utente utente){
+        if(utente == null){
+            return Collections.emptyList();
+        }
+        List<Eventi> myEventi = eventiService.findMyEventi(utente);
+        return myEventi.stream().map(nuovoEvento -> new EventiResponseDTO(
+                nuovoEvento.getId(),
+                nuovoEvento.getTitolo(),
+                nuovoEvento.getTipoEvento().getNome(),
+                nuovoEvento.getDescrizione(),
+                nuovoEvento.getAvatarUrl(),
+                nuovoEvento.getDataOra(),
+                nuovoEvento.getCitta(),
+                nuovoEvento.getVia(),
+                nuovoEvento.getRegione(),
+                nuovoEvento.getTipoEvento().getNome(),
+                nuovoEvento.getCategoria().getNome(),
+                nuovoEvento.getLatitudine(),
+                nuovoEvento.getLongitudine(),
+                nuovoEvento.getPrezzo(),
+                nuovoEvento.getOrganizzatore().getId(),
+                nuovoEvento.getDataCreazione(),
+                nuovoEvento.getDataUltimaModifica()
 
+        )).collect(Collectors.toList());
+    }
     //metodo per ricerca esterna
     @GetMapping("/search")
     public ResponseEntity<GoogleDTO> searchEventi(@RequestParam String prompt) {
@@ -72,7 +105,23 @@ public class EventiController {
             //Se API fallisce, restituisci 503 Service Unavailable
             return ResponseEntity.status(503).body(searchResult);
         }
-        // Se la ricerca ha successo, restituisci 200 OK
+        // Se la ricerca ha successo, restituisce 200 OK
         return ResponseEntity.ok(searchResult);
+    }
+
+    @GetMapping("/{id}")
+    public Eventi findById(@PathVariable UUID id) {
+        return eventiService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Eventi findByIdAndUpdate(@PathVariable UUID id, @RequestBody Eventi body) {
+        return eventiService.updateEvento(id, body);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findByIdAndDelete(@PathVariable UUID id) {
+        eventiService.deleteEvento(id);
     }
 }

@@ -1,8 +1,8 @@
 package projectCapston.freeToGo.payload;
 
-import projectCapston.freeToGo.entities.Utente;
 
-import java.time.LocalDate;
+
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,6 +14,10 @@ public record EventiResponseDTO(
         String avatarUrl,
         LocalDateTime dataOra,
         String citta,
+        String via,
+        String regione,
+        String nome,
+        String tipoEvento,
         double latitudine,
         double longitudine,
         Double prezzo,

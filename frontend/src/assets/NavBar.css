@@ -1,0 +1,71 @@
+  .navbar-glass {
+       background: rgba(25, 25, 25, 0.45);
+       backdrop-filter: blur(10px);
+       /* border: 1px solid rgba(0, 0, 0, 0.18); */
+       /* box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); */
+       padding-top: 0rem !important;
+       padding-bottom: 0rem !important;
+     }
+     
+    
+    .navbar-cartoon-font .nav-link,
+    .navbar-cartoon-font .navbar-brand,
+    .navbar-cartoon-font .dropdown-toggle {
+      font-family: 'Luckiest Guy', cursive;
+      font-weight: normal;
+      color: rgb(238, 199, 91) !important; 
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+      text-shadow: 2px 2px 3px rgba(0,0,0,0.7);
+      transition: transform 0.2s, filter 0.2s;
+    }
+    
+    .navbar-cartoon-font .dropdown-toggle:hover{
+       filter: brightness(1.2);
+    }
+    
+    .navbar-cartoon-font .dropdown-menu {
+      background: rgba(50, 50, 50, 0.7);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      
+    }
+    
+    .navbar-cartoon-font .dropdown-item {
+      font-family: 'Luckiest Guy', cursive;
+     color: rgb(238, 199, 91) !important;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+      
+    }
+    
+    .navbar-cartoon-font .dropdown-item:hover {
+      background-color: rgba(2, 2, 2, 0.2);
+    }
+    
+    .btn-glass {
+      background: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.705);
+      color: rgb(238, 199, 91) !important;
+      font-family: 'Luckiest Guy', cursive;
+      font-weight: normal;
+      box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.445);
+      transition: background 0.3s;
+       text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    }
+    
+    .btn-glass2 {
+    
+      -webkit-backdrop-filter: blur(20px);
+      filter: brightness(1.2);
+     
+      color: rgb(238, 199, 91) !important;
+      font-family: 'Luckiest Guy', cursive;
+      font-weight: normal;
+    
+      transition: background 0.3s;
+    }
+    
+   

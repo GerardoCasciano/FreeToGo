@@ -1,6 +1,6 @@
 package projectCapston.freeToGo.entities;
 
-import io.micrometer.observation.annotation.Observed;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
@@ -32,6 +32,7 @@ public class Utente implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+
     @Column(name = "dataCreazione",nullable = false )
     private LocalDateTime dataCreazione;
     @Column(name = "dataUltimaModifica", nullable = false)
@@ -55,19 +56,10 @@ public class Utente implements UserDetails {
    }
 
     //ManyToMany per Ruoli
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "utenti_ruoli",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "ruolo_id"))
-    @ToString.Exclude
-    private  Set<Ruolo> ruoli=new HashSet<>();
-
-@Override
-    public  Collection <? extends GrantedAuthority> getAuthorities(){
-       return ruoli.stream()
-               .map(ruolo-> new SimpleGrantedAuthority("ROLE_" + ruolo.getNome().name()))
-               .collect((Collectors.toList()));
-}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+    }
 @Override
     public String getUsername(){
        return this.email;
