@@ -8,7 +8,7 @@ import AddEventiPage from "../page/AddEventiPage";
 import MyEventiPage from "../page/MyEventiPage";
 import EditEventiPage from "../page/EditEventiPage";
 import ProfiloPage from "../page/ProfiloPage";
-
+import React from "react";
 const AppRoutes = () => {
   return (
     <Routes>

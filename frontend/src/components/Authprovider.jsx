@@ -1,6 +1,6 @@
 // src/context/AuthProvider.jsx
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isAuthenticated as checkAuthStatus } from "../api/authService";
 
 import AuthContext from "./AuthContext";

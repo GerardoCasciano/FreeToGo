@@ -1,5 +1,6 @@
 import Card from "react-bootstrap/Card";
 import InfoCards from "./InfoCards";
+import React from "react";
 const Homepage = () => {
   return (
     <>
