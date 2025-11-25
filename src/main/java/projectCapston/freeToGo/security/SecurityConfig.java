@@ -68,9 +68,7 @@ public PasswordEncoder passwordEncoder(){
                         .requestMatchers(HttpMethod.POST, "/api/utenti").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/utenti/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/categoria/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/eventi/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/utenti/**").hasRole("ADMIN")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/eventi/**").permitAll()
                         .anyRequest().authenticated());
 
 
@@ -83,9 +81,9 @@ public PasswordEncoder passwordEncoder(){
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration() ;
 
-            configuration.setAllowedOrigins(Collections.singletonList("*"));//permette tutte le origini
-            configuration.setAllowedMethods((Arrays.asList("GET","POST","PUT","PATCH","DELETE")));//Tutti i metodi
-            configuration.setAllowedHeaders(Collections.singletonList("*"));//tutti gli headers
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174"));
+            configuration.setAllowedMethods((Arrays.asList("GET","POST","PUT","PATCH","DELETE")));
+            configuration.setAllowedHeaders(Collections.singletonList("*"));
 
         //Registrazine della sorgente
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

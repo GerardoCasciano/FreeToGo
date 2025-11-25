@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Homepage from "../components/Homepage";
 import RegistrazionePage from "../page/RegistrazionePage";
-import AdminRegistrazionePage from "../page/AdminRegistrazionePage";
-import CategoriaAdminPage from "../page/CategorieAdminPage";
 import LoginPage from "../page/LoginPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SearchPage from "../page/SearchPage";
@@ -30,22 +28,6 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <MyEventiPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/register"
-        element={
-          <ProtectedRoute isAdmin={true}>
-            <AdminRegistrazionePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/categoria"
-        element={
-          <ProtectedRoute isAdmin={true}>
-            <CategoriaAdminPage />
           </ProtectedRoute>
         }
       />
