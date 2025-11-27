@@ -301,7 +301,7 @@ const AddEventiPage = () => {
               />
             </Form.Group>
 
-            {/* SEZIONE INDIRIZZO (Attiva Geocodifica e Mappa) */}
+            {/* //SEZIONE INDIRIZZO Attiva Geocodifica e Mappa  */}
             <Row>
               <Col md={4}>
                 <Form.Group className="mb-3">
@@ -343,7 +343,7 @@ const AddEventiPage = () => {
             <Row>
               <Col md={12}>
                 <Form.Label>
-                  📍 Posizione Evento (clicca sulla mappa per selezionare)
+                  Posizione Evento (clicca sulla mappa per selezionare)
                 </Form.Label>
                 <MapContainer
                   center={[formData.latitudine, formData.longitudine]}
@@ -410,9 +410,9 @@ const AddEventiPage = () => {
             </Row>
 
             <Form.Group className="mb-3 mt-3">
-              <Form.Label>URL Immagine</Form.Label>
+              <Form.Label>Immagine</Form.Label>
               <Form.Control
-                type="url"
+                type="file"
                 name="avatarUrl"
                 value={formData.avatarUrl}
                 onChange={handleChange}

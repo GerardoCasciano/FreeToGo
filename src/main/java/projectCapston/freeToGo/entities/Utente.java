@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Entity
 @Getter
@@ -55,7 +55,7 @@ public class Utente implements UserDetails {
        this.dataUltimaModifica= LocalDateTime.now();
    }
 
-    //ManyToMany per Ruoli
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));

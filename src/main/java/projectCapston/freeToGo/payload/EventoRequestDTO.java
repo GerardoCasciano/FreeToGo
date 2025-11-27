@@ -18,8 +18,8 @@ public record EventoRequestDTO(
         String citta,
         String via,
         String regione,
-        double latitudine,
-        double longitudine,
+        Double latitudine,
+        Double longitudine,
         Double prezzo,
         @NotBlank(message = "Il nome del tipo di evento è obbligatorio")
         String tipoEventoNome,
@@ -29,3 +29,4 @@ public record EventoRequestDTO(
         UUID organizzatoreId
 ) {
 }
+

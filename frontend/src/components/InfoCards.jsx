@@ -17,7 +17,7 @@ const InfoCards = () => {
             onClick={() => handleCardClick("Musica")}
             style={{ cursor: "pointer" }}
           >
-            <Card.Img variant="top" src="/musica.png" />
+            <Card.Img variant="top" src="/musicaPop.jpg" />
             <Card.Body className="d-flex flex-column flex-grow-1 ">
               <Card.Title className="text-center mb-3">
                 <h3>Musica</h3>

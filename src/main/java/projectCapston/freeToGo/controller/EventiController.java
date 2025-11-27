@@ -3,44 +3,83 @@ package projectCapston.freeToGo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.*;
+
 import projectCapston.freeToGo.entities.Eventi;
+
 import projectCapston.freeToGo.entities.Utente;
+
 import projectCapston.freeToGo.payload.EventiResponseDTO;
+
 import projectCapston.freeToGo.payload.EventoRequestDTO;
+
 import projectCapston.freeToGo.payload.GoogleDTO;
+
 import projectCapston.freeToGo.service.DataBaseEventiService;
+
 import projectCapston.freeToGo.service.EventoSearchService;
+
 import projectCapston.freeToGo.service.UtenteService;
 
 
+
+
+
 import java.util.Collections;
+
 import java.util.List;
+
 import java.util.UUID;
+
 import java.util.stream.Collectors;
 
+
+
 @RestController
+
 @RequestMapping("/api/eventi")
+
 @CrossOrigin(origins = "http://localhost:5173")
+
 public class EventiController {
+
     @Autowired
+
     private DataBaseEventiService eventiService;
+
     @Autowired
+
     private UtenteService utenteService;
+
     @Autowired
+
     private EventoSearchService eventoSearchService;
 
+
+
     @PostMapping
+
     @ResponseStatus(HttpStatus.CREATED)
+
     public EventiResponseDTO creaNuovoEvento(
+
             @RequestBody @Validated EventoRequestDTO eventoDTO,
+
             @AuthenticationPrincipal Utente utente) {
+
         Eventi nuovoEvento = eventiService.createEvento(eventoDTO, utente);
+
         return new EventiResponseDTO(
+
                 nuovoEvento.getId(),
+
                 nuovoEvento.getTitolo(),
                 nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getDescrizione(),

@@ -24,7 +24,7 @@ public class JWTTools {
 
     public String createToken (Utente utente){
         if (secret == null || secret.isEmpty()) {
-            throw new RuntimeException("JWT secret is not configured.");
+            throw new RuntimeException("JWT secret non è configurato.");
         }
         String ruoliString = utente.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

@@ -99,8 +99,7 @@ public class UtenteService implements UserDetailsService {
         utenteEsistente.setNome(utenteDetails.getNome());
         utenteEsistente.setCognome(utenteDetails.getCognome());
         utenteEsistente.setEmail(utenteDetails.getEmail());
-        // Non aggiorniamo la password qui, dovrebbe essere un metodo separato per sicurezza
-        // utenteEsistente.setPassword(passwordEncoder.encode(utenteDetails.getPassword()));
+
 
         return utenteRepository.save(utenteEsistente);
     }
@@ -122,7 +121,7 @@ public class UtenteService implements UserDetailsService {
                         utente.getId(),
                         utente.getNome(),
                         utente.getEmail(),
-                        utente.getPassword(), // Consider if password should be exposed in DTO
+                        utente.getPassword(),
                         utente.getDataCreazione(),
                         utente.getDataUltimaModifica(),
                         utente.getAvatarUrl()

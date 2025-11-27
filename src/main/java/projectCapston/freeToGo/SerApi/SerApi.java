@@ -29,7 +29,7 @@ public class SerApi {
         public String snippet;
 
         @JsonProperty("source")
-        public Source source; // Usa la classe Source definita sotto
+        public Source source;
 
 
         public static class Source {
@@ -51,11 +51,11 @@ public class SerApi {
 
 
     public static class SerApiResponse {
-        // Corretto l'errore di battitura e reso il nome consistente
+
         @JsonProperty("organic_results")
         public List<OrganicResult> organicResults;
 
-        // Reso il nome consistente (tutto minuscolo)
+
         @JsonProperty("knowledge_graph")
         public KnowledgeGraph knowledgeGraph;
 

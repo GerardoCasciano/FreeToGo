@@ -27,7 +27,6 @@ public class Eventi {
 
     @Column(name = "descrizione", nullable = false)
     private String descrizione;
-    @URL
     @Column(name = "avatar_url")
     private String avatarUrl;
     @Column(name = "data_ora", nullable = false)
