@@ -109,7 +109,7 @@ public class GoogleService {
                 generatedResponse = knowledgeGraph.path("description").asText();
             }
 
-            //  l'estrazione delle fonti
+            //  estrazione delle fonti
             JsonNode organicResults = rootNode.path("organic_results");
             if (organicResults.isArray()) {
                 for (JsonNode result : organicResults) {
@@ -123,12 +123,12 @@ public class GoogleService {
                 }
             }
 
-            // Fallback se non è stata trovata una risposta diretta
+            // Fallback se non è stata trovata una risposta
             if (generatedResponse.equals("Nessuna risposta trovata.") && organicResults.size() > 0) {
                 generatedResponse = "Il primo risultato di ricerca suggerisce: " + organicResults.get(0).path("snippet").asText();
             }
 
-            //  Passato il nuovo tipo di lista al costruttore
+            //  Passa il nuovo tipo di lista al costruttore
             return new GoogleDTO(userPrompt, generatedResponse, structuredSources);
         } catch (IOException exception) {
             System.err.println("Errore durante il parsing del JSON da SerpApi: " + exception.getMessage());
