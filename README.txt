@@ -116,24 +116,3 @@ Frontend (React)
 
 ---
 
-Struttura del Progetto
-
-.
-├── backend/          # Codice sorgente del server Node.js (se presente, qui è il pom.xml)
-├── frontend/         # Codice sorgente dell'applicazione React
-│   ├── src/
-│   │   ├── api/      # Servizi per le chiamate HTTP al backend
-│   │   ├── components/ # Componenti React riutilizzabili
-│   │   ├── page/     # Pagine principali dell'applicazione
-│   │   └── rooutes/  # Configurazione del routing
-│   └── package.json  # Dipendenze e script del frontend
-├── src/              # Codice sorgente del backend Java
-│   ├── main/java/projectCapston/freeToGo/
-│   │   ├── controller/ # Controller REST
-│   │   ├── service/    # Logica di business
-│   │   ├── entities/   # Entità JPA
-│   │   ├── repositories/ # Repository Spring Data
-│   │   └── security/   # Configurazione di sicurezza e JWT
-│   └── main/resources/
-│       └── application.properties # File di configurazione
-└── pom.xml           # Dipendenze e configurazione del backend Maven
