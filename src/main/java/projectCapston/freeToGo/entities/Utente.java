@@ -57,6 +57,7 @@ public class Utente implements UserDetails {
 
 
     @Override
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }

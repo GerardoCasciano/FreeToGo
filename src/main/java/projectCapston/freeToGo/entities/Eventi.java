@@ -43,14 +43,14 @@ public class Eventi {
     private double longitudine;
     @Column(name = "prezzo")
     private Double prezzo;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "utente_id", nullable = false)
    private Utente utente;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tipo_evento_id", nullable = false)
     private TipoDiEvento tipoEvento;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
@@ -60,7 +60,7 @@ public class Eventi {
     @Column(name = "dataUltimaModifica")
     private LocalDateTime dataUltimaModifica;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organizzatore_id", nullable = false)
     private Utente organizzatore;
 }

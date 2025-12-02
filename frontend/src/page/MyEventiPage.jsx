@@ -125,7 +125,7 @@ const MyEventiPage = () => {
                 {eventi.map((evento) => (
                   <tr key={evento.id}>
                     <td>{evento.titolo}</td>
-                    <td>{evento.tipoEventoNome || "Non specificato"}</td>
+                    <td>{evento.tipoEventoNome || ""}</td>
                     <td>{moment(evento.dataOra).format("DD/MM/YYYY HH:mm")}</td>
                     <td>
                       <Button

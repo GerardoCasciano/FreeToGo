@@ -77,19 +77,16 @@ public class EventiController {
         Eventi nuovoEvento = eventiService.createEvento(eventoDTO, utente);
 
         return new EventiResponseDTO(
-
                 nuovoEvento.getId(),
-
                 nuovoEvento.getTitolo(),
-                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getDescrizione(),
                 nuovoEvento.getAvatarUrl(),
                 nuovoEvento.getDataOra(),
                 nuovoEvento.getCitta(),
                 nuovoEvento.getVia(),
                 nuovoEvento.getRegione(),
-                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getCategoria().getNome(),
+                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getLatitudine(),
                 nuovoEvento.getLongitudine(),
                 nuovoEvento.getPrezzo(),
@@ -108,22 +105,20 @@ public class EventiController {
         return myEventi.stream().map(nuovoEvento -> new EventiResponseDTO(
                 nuovoEvento.getId(),
                 nuovoEvento.getTitolo(),
-                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getDescrizione(),
                 nuovoEvento.getAvatarUrl(),
                 nuovoEvento.getDataOra(),
                 nuovoEvento.getCitta(),
                 nuovoEvento.getVia(),
                 nuovoEvento.getRegione(),
-                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getCategoria().getNome(),
+                nuovoEvento.getTipoEvento().getNome(),
                 nuovoEvento.getLatitudine(),
                 nuovoEvento.getLongitudine(),
                 nuovoEvento.getPrezzo(),
                 nuovoEvento.getOrganizzatore().getId(),
                 nuovoEvento.getDataCreazione(),
                 nuovoEvento.getDataUltimaModifica()
-
         )).collect(Collectors.toList());
     }
     //metodo per ricerca esterna
@@ -154,8 +149,26 @@ public class EventiController {
     }
 
     @PutMapping("/{id}")
-    public Eventi findByIdAndUpdate(@PathVariable UUID id, @RequestBody Eventi body) {
-        return eventiService.updateEvento(id, body);
+    public EventiResponseDTO findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated EventoRequestDTO body, @AuthenticationPrincipal Utente utente) {
+        Eventi updatedEvento = eventiService.updateEvento(id, body);
+        return new EventiResponseDTO(
+                updatedEvento.getId(),
+                updatedEvento.getTitolo(),
+                updatedEvento.getDescrizione(),
+                updatedEvento.getAvatarUrl(),
+                updatedEvento.getDataOra(),
+                updatedEvento.getCitta(),
+                updatedEvento.getVia(),
+                updatedEvento.getRegione(),
+                updatedEvento.getCategoria().getNome(),
+                updatedEvento.getTipoEvento().getNome(),
+                updatedEvento.getLatitudine(),
+                updatedEvento.getLongitudine(),
+                updatedEvento.getPrezzo(),
+                updatedEvento.getOrganizzatore().getId(),
+                updatedEvento.getDataCreazione(),
+                updatedEvento.getDataUltimaModifica()
+        );
     }
 
     @DeleteMapping("/{id}")

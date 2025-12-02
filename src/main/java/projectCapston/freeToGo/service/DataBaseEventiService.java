@@ -92,20 +92,37 @@ return savedEvento;
 
     //Aggiorna evento esistente
     @Transactional
-    public Eventi updateEvento(UUID id, Eventi updateEvento) {
+    public Eventi updateEvento(UUID id, EventoRequestDTO eventoRequest) {
         //check evento esistente
         Eventi existingEvento = eventiRepository.findById(id)
                 .orElseThrow(() -> new ResourseNotFoundException("Evento non trovato con Id :" + id));
+
+        Categoria categoria = categoriaRepository.findById(eventoRequest.categoriaId())
+                .orElseThrow(() -> new NotFoundException("Categoria con ID " + eventoRequest.categoriaId() + " non trovata."));
+
+        TipoDiEvento tipoDiEvento = tipoDiEventoRepository.findByNome(eventoRequest.tipoEventoNome())
+                .orElseGet(() -> {
+                    TipoDiEvento newTipoDiEvento = new TipoDiEvento();
+                    newTipoDiEvento.setNome(eventoRequest.tipoEventoNome());
+                    newTipoDiEvento.setCategoria(categoria);
+                    return tipoDiEventoRepository.save(newTipoDiEvento);
+                });
+
+
         //Aggiornamento campi
-        existingEvento.setTitolo(updateEvento.getTitolo());
-        existingEvento.setCitta(updateEvento.getCitta());
-        existingEvento.setDataCreazione(updateEvento.getDataCreazione());
-        existingEvento.setDataOra(updateEvento.getDataOra());
-        existingEvento.setDescrizione(updateEvento.getDescrizione());
-        existingEvento.setDataUltimaModifica(updateEvento.getDataUltimaModifica());
-        existingEvento.setLatitudine(updateEvento.getLatitudine());
-        existingEvento.setLongitudine(updateEvento.getLongitudine());
-        existingEvento.setPrezzo(updateEvento.getPrezzo());
+        existingEvento.setTitolo(eventoRequest.titolo());
+        existingEvento.setDescrizione(eventoRequest.descrizione());
+        existingEvento.setAvatarUrl(eventoRequest.avatarUrl());
+        existingEvento.setDataOra(eventoRequest.dataOra());
+        existingEvento.setCitta(eventoRequest.citta());
+        existingEvento.setVia(eventoRequest.via());
+        existingEvento.setLatitudine(eventoRequest.latitudine());
+        existingEvento.setLongitudine(eventoRequest.longitudine());
+        existingEvento.setPrezzo(eventoRequest.prezzo());
+        existingEvento.setTipoEvento(tipoDiEvento);
+        existingEvento.setCategoria(categoria);
+
+        existingEvento.setDataUltimaModifica(LocalDateTime.now());
 
         //Salvo evento aggiornato
         return eventiRepository.save(existingEvento);

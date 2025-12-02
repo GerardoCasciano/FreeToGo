@@ -24,9 +24,7 @@ public record EventoRequestDTO(
         @NotBlank(message = "Il nome del tipo di evento è obbligatorio")
         String tipoEventoNome,
         @NotNull(message = "L'ID della categoria è obbligatorio")
-        UUID categoriaId,
-        @NotNull(message = "L'ID dell'organizzatore è obbligatorio")
-        UUID organizzatoreId
+        UUID categoriaId
 ) {
 }
 
