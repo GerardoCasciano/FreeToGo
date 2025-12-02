@@ -1,6 +1,5 @@
 import { useState } from "react";
 import utenteService from "../api/utenteService";
-import { useAuth } from "../hook/useAuth";
 import {
   Alert,
   Button,
@@ -11,8 +10,11 @@ import {
   Form,
 } from "react-bootstrap";
 
+import { useAuth } from "../components/AuthContext";
+
 const ProfiloPage = () => {
   const { user, updateUser, loading: authLoading } = useAuth();
+
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -21,11 +23,10 @@ const ProfiloPage = () => {
   const handleFileChange = (event) => {
     setAvatarFile(event.target.files[0]);
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!avatarFile) {
-      setError("Per favore, seleziona un file immagine.");
+      setError("Per favore, seleziona un file immainge.");
       return;
     }
 
@@ -34,12 +35,13 @@ const ProfiloPage = () => {
     setSuccess("");
     try {
       const resultData = await utenteService.uploadAvatar(user.id, avatarFile);
-      updateUser(resultData);
+      updateUser(resultData); // Update user context with new avatar data
+
       setSuccess("Immagine del profilo aggiornata!");
       setAvatarFile(null);
     } catch (error) {
-      console.error("Errore caricamento dell'immagine", error);
-      setError("Errore durante il caricamento dell'immagine");
+      console.error("Errore caricamenot dell'immagine", error);
+      setError("Errore duarante il carcamento dell'immagine");
     } finally {
       setLoading(false);
     }
@@ -49,9 +51,8 @@ const ProfiloPage = () => {
     return (
       <Container className="mt-5 text-center">
         <Spinner animation="border" role="status">
-          <span className="visually-hidden">Caricamento...</span>
+          <span className="visually-hidden">Caricamento del profilo...</span>
         </Spinner>
-        <p>Caricamento del profilo...</p>
       </Container>
     );
   }
