@@ -27,26 +27,17 @@ const EditEventiPage = () => {
     prezzo: 0,
     categoriaId: "",
     tipoEventoNome: "",
-    tipoEventoId: "", // Campo per l'ID del tipo di evento
     avatarUrl: "",
     latitudine: 0,
     longitudine: 0,
   });
-
-  const [categorie, setCategorie] = useState([]);
-  const [tipiEvento, setTipiEvento] = useState([]);
-  const [loadingTipiEvento, setLoadingTipiEvento] = useState(false);
-
 
   useEffect(() => {
     const fetchEventoData = async () => {
       setLoading(true);
       try {
         const data = await eventiService.getEventoById(id);
-        const categoriesData = await eventiService.getAllCategorie(); // Fetch all categories
-        setCategorie(categoriesData);
-
-        console.log("Dati evento ricevuti:", data); // DEBUG
+        console.log("Dati evento ricevuti:", data);
         const dataFormattata = moment(data.dataOra).format("YYYY-MM-DDTHH:mm");
         setFormData({
           titolo: data.titolo || "",
@@ -58,7 +49,6 @@ const EditEventiPage = () => {
           prezzo: data.prezzo || 0,
           categoriaId: data.categoria?.id || "",
           tipoEventoNome: data.tipoEvento?.nome || "",
-          tipoEventoId: data.tipoEvento?.id || "", // Set tipoEventoId
           avatarUrl: data.avatarUrl || "",
           latitudine: data.latitudine || 0,
           longitudine: data.longitudine || 0,
@@ -73,56 +63,9 @@ const EditEventiPage = () => {
     fetchEventoData();
   }, [id]);
 
-  useEffect(() => {
-    if (formData.categoriaId) {
-      setLoadingTipiEvento(true);
-      eventiService
-        .getTipiEventoByCategoria(formData.categoriaId)
-        .then((data) => {
-          setTipiEvento(data);
-          // If the current tipoEventoId is not in the new list, clear it
-          if (
-            !data.some((tipo) => tipo.id === formData.tipoEventoId) &&
-            formData.tipoEventoId !== ""
-          ) {
-            setFormData((prev) => ({
-              ...prev,
-              tipoEventoId: "",
-              tipoEventoNome: "",
-            }));
-          }
-        })
-        .catch((error) => {
-          console.error("Errore nel recupero dei tipi di evento:", error);
-          setTipiEvento([]);
-        })
-        .finally(() => {
-          setLoadingTipiEvento(false);
-        });
-    } else {
-      setTipiEvento([]);
-      setFormData((prev) => ({
-        ...prev,
-        tipoEventoId: "",
-        tipoEventoNome: "",
-      }));
-    }
-  }, [formData.categoriaId]);
-
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prev) => {
-      let updatedFormData = { ...prev, [name]: value };
-
-      if (name === "categoriaId") {
-        updatedFormData.tipoEventoId = ""; // Reset tipoEvento when category changes
-        updatedFormData.tipoEventoNome = "";
-      } else if (name === "tipoEventoId") {
-        const selectedTipo = tipiEvento.find((tipo) => tipo.id === value);
-        updatedFormData.tipoEventoNome = selectedTipo ? selectedTipo.nome : "";
-      }
-      return updatedFormData;
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
@@ -139,7 +82,7 @@ const EditEventiPage = () => {
       longitudine: parseFloat(formData.longitudine),
     };
 
-    console.log("Dati evento inviati:", eventoData); // DEBUG
+    console.log("Dati evento inviati:", eventoData);
 
     try {
       await eventiService.updateEvento(id, eventoData);
@@ -203,50 +146,6 @@ const EditEventiPage = () => {
                 required
               />
             </Form.Group>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Categoria</Form.Label>
-                  <Form.Select
-                    name="categoriaId"
-                    value={formData.categoriaId}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Seleziona una categoria</option>
-                    {categorie.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.nome}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Tipo di Evento</Form.Label>
-                  <Form.Select
-                    name="tipoEventoId"
-                    value={formData.tipoEventoId}
-                    onChange={handleChange}
-                    required
-                    disabled={!formData.categoriaId || loadingTipiEvento}
-                  >
-                    <option value="">
-                      {loadingTipiEvento
-                        ? "Caricamento tipi evento..."
-                        : "Seleziona un tipo di evento"}
-                    </option>
-                    {tipiEvento.map((tipo) => (
-                      <option key={tipo.id} value={tipo.id}>
-                        {tipo.nome}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
 
             <Form.Group className="mb-3">
               <Form.Label>Data e Ora</Form.Label>
