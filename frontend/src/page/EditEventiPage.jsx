@@ -170,13 +170,23 @@ const EditEventiPage = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
+              <Form.Label>Tipo di Evento</Form.Label>
+              <Form.Control
+                type="text"
+                name="tipoEventoNome"
+                value={formData.tipoEventoNome}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
               <Form.Label>Città</Form.Label>
               <Form.Control
                 type="text"
                 name="citta"
                 value={formData.citta}
-                readOnly
-                disabled
+                onChange={handleChange}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -185,8 +195,7 @@ const EditEventiPage = () => {
                 type="text"
                 name="via"
                 value={formData.via}
-                readOnly
-                disabled
+                onChange={handleChange}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -195,8 +204,7 @@ const EditEventiPage = () => {
                 type="text"
                 name="regione"
                 value={formData.regione || ""}
-                readOnly
-                disabled
+                onChange={handleChange}
               />
             </Form.Group>
 
@@ -204,7 +212,7 @@ const EditEventiPage = () => {
               type="submit"
               variant="success"
               disabled={loading}
-              className="mt-3 rounded-pill"
+              className="mb-3 rounded-pill"
             >
               {loading ? "Salvataggio..." : "Salva Modifiche"}
             </Button>

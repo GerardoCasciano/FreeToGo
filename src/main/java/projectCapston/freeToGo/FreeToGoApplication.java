@@ -11,4 +11,3 @@ public class FreeToGoApplication {
 	}
 
 }
-

@@ -62,13 +62,10 @@ const AddEventiPage = () => {
     prezzo: 0,
     categoriaId: "",
     tipoEventoNome: "",
-    tipoEventoId: "",
   });
 
   const [categorie, setCategorie] = useState([]);
-  const [tipiEvento, setTipiEvento] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingTipiEvento, setLoadingTipiEvento] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -158,39 +155,7 @@ const AddEventiPage = () => {
     fetchCategoria();
   }, []);
 
-  useEffect(() => {
-    if (formData.categoriaId) {
-      setLoadingTipiEvento(true);
-      eventiService
-        .getTipiEventoByCategoria(formData.categoriaId)
-        .then((data) => {
-          setTipiEvento(data);
-          if (
-            !data.some((tipo) => tipo.id === formData.tipoEventoId) &&
-            formData.tipoEventoId !== ""
-          ) {
-            setFormData((prev) => ({
-              ...prev,
-              tipoEventoId: "",
-              tipoEventoNome: "",
-            }));
-          }
-        })
-        .catch((error) => {
-          console.error("Errore nel recupero dei tipi di evento:", error);
-          setTipiEvento([]);
-        })
-        .finally(() => {
-          setLoadingTipiEvento(false);
-        });
-    } else {
-      setTipiEvento([]);
-      setFormData((prev) => ({
-        ...prev,
-        tipoEventoId: "",
-      }));
-    }
-  }, [formData.categoriaId]);
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -206,14 +171,6 @@ const AddEventiPage = () => {
 
     setFormData((prev) => {
       const newFormData = { ...prev, [name]: newValue };
-
-      if (name === "categoriaId") {
-        newFormData.tipoEventoId = ""; // Reset tipoEvento when category changes
-        newFormData.tipoEventoNome = "";
-      } else if (name === "tipoEventoId") {
-        const selectedTipo = tipiEvento.find((tipo) => tipo.id === newValue);
-        newFormData.tipoEventoNome = selectedTipo ? selectedTipo.nome : "";
-      }
 
       if (name === "citta" || name === "via" || name === "regione") {
         const newTimer = setTimeout(() => {
@@ -323,24 +280,13 @@ const AddEventiPage = () => {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Tipo di Evento</Form.Label>
-                  <Form.Select
-                    name="tipoEventoId"
-                    value={formData.tipoEventoId}
+                  <Form.Control
+                    type="text"
+                    name="tipoEventoNome"
+                    value={formData.tipoEventoNome}
                     onChange={handleChange}
-                    required
-                    disabled={!formData.categoriaId || loadingTipiEvento}
-                  >
-                    <option value="">
-                      {loadingTipiEvento
-                        ? "Caricamento tipi evento..."
-                        : "Seleziona un tipo di evento"}
-                    </option>
-                    {tipiEvento.map((tipo) => (
-                      <option key={tipo.id} value={tipo.id}>
-                        {tipo.nome}
-                      </option>
-                    ))}
-                  </Form.Select>
+                    placeholder="Es. Concerto, Mostra, ecc."
+                  />
                 </Form.Group>
               </Col>
             </Row>
