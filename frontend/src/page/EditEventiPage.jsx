@@ -198,15 +198,6 @@ const EditEventiPage = () => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Regione</Form.Label>
-              <Form.Control
-                type="text"
-                name="regione"
-                value={formData.regione || ""}
-                onChange={handleChange}
-              />
-            </Form.Group>
 
             <Button
               type="submit"

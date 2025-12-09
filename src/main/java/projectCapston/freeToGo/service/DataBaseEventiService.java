@@ -97,18 +97,6 @@ return savedEvento;
         Eventi existingEvento = eventiRepository.findById(id)
                 .orElseThrow(() -> new ResourseNotFoundException("Evento non trovato con Id :" + id));
 
-        Categoria categoria = categoriaRepository.findById(eventoRequest.categoriaId())
-                .orElseThrow(() -> new NotFoundException("Categoria con ID " + eventoRequest.categoriaId() + " non trovata."));
-
-        TipoDiEvento tipoDiEvento = tipoDiEventoRepository.findByNome(eventoRequest.tipoEventoNome())
-                .orElseGet(() -> {
-                    TipoDiEvento newTipoDiEvento = new TipoDiEvento();
-                    newTipoDiEvento.setNome(eventoRequest.tipoEventoNome());
-                    newTipoDiEvento.setCategoria(categoria);
-                    return tipoDiEventoRepository.save(newTipoDiEvento);
-                });
-
-
         //Aggiornamento campi
         existingEvento.setTitolo(eventoRequest.titolo());
         existingEvento.setDescrizione(eventoRequest.descrizione());
@@ -119,10 +107,26 @@ return savedEvento;
         existingEvento.setLatitudine(eventoRequest.latitudine());
         existingEvento.setLongitudine(eventoRequest.longitudine());
         existingEvento.setPrezzo(eventoRequest.prezzo());
-        existingEvento.setTipoEvento(tipoDiEvento);
-        existingEvento.setCategoria(categoria);
-
         existingEvento.setDataUltimaModifica(LocalDateTime.now());
+
+
+        if (eventoRequest.categoriaId() != null) {
+            Categoria categoria = categoriaRepository.findById(eventoRequest.categoriaId())
+                    .orElseThrow(() -> new NotFoundException("Categoria con ID " + eventoRequest.categoriaId() + " non trovata."));
+            existingEvento.setCategoria(categoria);
+        }
+
+
+        if (eventoRequest.tipoEventoNome() != null && (existingEvento.getTipoEvento() == null || !eventoRequest.tipoEventoNome().equals(existingEvento.getTipoEvento().getNome()))) {
+            TipoDiEvento tipoDiEvento = tipoDiEventoRepository.findByNome(eventoRequest.tipoEventoNome())
+                    .orElseGet(() -> {
+                        TipoDiEvento newTipoDiEvento = new TipoDiEvento();
+                        newTipoDiEvento.setNome(eventoRequest.tipoEventoNome());
+                        newTipoDiEvento.setCategoria(existingEvento.getCategoria());
+                        return tipoDiEventoRepository.save(newTipoDiEvento);
+                    });
+            existingEvento.setTipoEvento(tipoDiEvento);
+        }
 
         //Salvo evento aggiornato
         return eventiRepository.save(existingEvento);

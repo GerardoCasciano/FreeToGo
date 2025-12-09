@@ -155,8 +155,6 @@ const AddEventiPage = () => {
     fetchCategoria();
   }, []);
 
-
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     let newValue = value;
